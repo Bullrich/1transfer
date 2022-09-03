@@ -2,6 +2,18 @@
 pragma solidity ^0.8.9;
 
 contract PaymentSplitter {
+    address private owner;
+    uint256 private surplus;
+
+    constructor() {
+        owner = msg.sender;
+    }
+
+    function getSurplus() public view returns (uint256) {
+        require(msg.sender == owner, "Call is not the owner");
+        return surplus;
+    }
+
    function modulo(uint256 a, uint256 b) public pure returns (uint256) {
         require(b > 0, "Value can not be zero");
         require(a > b, "Divisible can not be less than divisor");
@@ -21,5 +33,21 @@ contract PaymentSplitter {
         uint divisibleValue = amount - remaining;
         // Now we can properly divide the number without having floating points
         return divisibleValue / recipients;
+    }
+
+    function splitPayment(address[] memory recipients) public payable {
+        // get the amount of recipients
+        uint nrOfrecipients = recipients.length;
+        // calculate how much each recipient will receive
+        uint256 values = calculatePayment(msg.value, nrOfrecipients);
+        uint256 index = 0;
+        for (index = 0; index < nrOfrecipients; index++) {
+            // convert each recipient and transfer them the amount
+            address payable target = payable(recipients[index]);
+            target.transfer(values);
+        }
+        // get the remaining and add it to the surplus
+        uint256 remaining = calculateRemaining(msg.value, nrOfrecipients);
+        surplus += remaining;
     }
 }
