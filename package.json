@@ -8,7 +8,9 @@
     "build": "vite build",
     "postbuild": "node scripts/removeSlash.js",
     "preview": "vite preview",
-    "check": "svelte-check --tsconfig ./tsconfig.json"
+    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "postinstall": "npm --prefix contracts install",
+    "prebuild": "npm run --prefix contracts build"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^1.0.1",

@@ -35,6 +35,8 @@ jobs:
         with:
           node-version: 16
       - run: npm install
+      - name: Test contract
+        run: npm run --prefix contracts test
       - name: Build
         run: npm run build
       - name: Setup Pages
