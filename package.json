@@ -12,6 +12,9 @@
     "postinstall": "npm --prefix contracts install",
     "prebuild": "npm run --prefix contracts build"
   },
+  "dependencies": {
+    "ethers": "^5.7.0"
+  },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^1.0.1",
     "@tsconfig/svelte": "^3.0.0",
