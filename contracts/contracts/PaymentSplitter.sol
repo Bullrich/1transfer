@@ -4,6 +4,7 @@ pragma solidity ^0.8.9;
 contract PaymentSplitter {
     address private owner;
     uint256 private surplus;
+    uint256 private constant ethMultiplier = 100000 gwei;
 
     constructor() {
         owner = msg.sender;
@@ -22,7 +23,7 @@ contract PaymentSplitter {
 
     // Calculate the modular value into the 0.01 field of 1 eth.
     function calculateRemaining(uint amount, uint recipients) public pure returns (uint) {
-        return modulo(amount, recipients * 100000 gwei);
+        return modulo(amount, recipients * ethMultiplier);
     }
 
     // Calculate an equal division value
