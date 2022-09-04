@@ -1,7 +1,7 @@
 <script lang="ts">
-  import Web3Card from "./lib/components/Web3Card.svelte";
+  import Dashboard from "./lib/Dashboard.svelte";
 </script>
 
 <main>
-  <Web3Card />
+  <Dashboard />
 </main>
