@@ -15,7 +15,7 @@
     }
   </script>
   
-  <div class="hero min-h-screen bg-base-200">
+  <div class="hero min-h-full flex-grow bg-base-200">
     <div class="hero-content flex-col lg:flex-row-reverse">
       <div class="text-center lg:text-left">
         {#if $amount > 0 && $addressesLength > 0}
