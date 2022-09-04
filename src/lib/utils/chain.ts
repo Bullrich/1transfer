@@ -10,6 +10,22 @@ export enum Chains {
     OPTIMISM_KOVAN = 69
 }
 
+export const getChainCollection = (): { name: string; id: Chains }[] => {
+    const collection: { name: string; id: Chains }[] = [];
+    for (const chain in Chains) {
+        const isValueProperty = Number(chain) >= 0
+        if (isValueProperty) {
+            const name: string = Chains[chain];
+            const upperCaseName = name.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()).replace(/\_/, " ");
+            collection.push({ name: upperCaseName, id: Number(chain) });
+        }
+    }
+    return collection;
+}
+
+/** Returns true if the network is inside our list of enum networks */
+export const isKnownNetwork = (id:number) => Object.values(Chains).includes(id as Chains);
+
 export const changeNetwork = async (chainId: number): Promise<void> => {
     return new Promise((res, rej) => {
         if (window.ethereum.networkVersion === chainId.toString()) {
