@@ -5,7 +5,7 @@ export async function calculatePaymentSplit(contract: PaymentSplitter | undefine
     const amountInEth = utils.parseUnits(amount.toString());
     if (contract) {
         const paymentCalculator = await contract.calculatePayment(amountInEth, targets);
-        return utils.formatEther(paymentCalculator.toString()) + " Contract calculated";
+        return utils.formatEther(paymentCalculator.toString());
     }
     const parsedTarget = utils.parseUnits(`${targets}00000`, "gwei");
     const remaining = amountInEth.mod(parsedTarget);
@@ -20,7 +20,7 @@ export async function calculateRemaining(contract: PaymentSplitter | undefined, 
     const amountInEth = utils.parseUnits(amount.toString());
     if (contract) {
         const paymentCalculator = await contract.calculateRemaining(amountInEth, targets);
-        return utils.formatEther(paymentCalculator.toString()) + " Contract calculated";
+        return utils.formatEther(paymentCalculator.toString());
     }
     const parsedTarget = utils.parseUnits(`${targets}00000`, "gwei");
     const remaining = amountInEth.mod(parsedTarget);
