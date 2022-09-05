@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { remaining,splitPayment } from "../stores/contract";
-    import { addressesLength as aLength,amount } from "../stores/form";
+    import { remaining, splitPayment } from "../stores/contract";
+    import { addressesLength as aLength, amount } from "../stores/form";
 </script>
 
 <div>

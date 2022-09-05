@@ -2,12 +2,9 @@ import { utils } from "ethers";
 import type { PaymentSplitter } from "../contracts";
 
 export async function calculatePaymentSplit(contract: PaymentSplitter | undefined, amount: number, targets: number) {
-    console.log("contract", contract);
     const amountInEth = utils.parseUnits(amount.toString());
     if (contract) {
-        console.log("promise")
         const paymentCalculator = await contract.calculatePayment(amountInEth, targets);
-        console.log("promise done", paymentCalculator);
         return utils.formatEther(paymentCalculator.toString()) + " Contract calculated";
     }
     const parsedTarget = utils.parseUnits(`${targets}00000`, "gwei");

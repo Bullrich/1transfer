@@ -1,10 +1,10 @@
 import { derived, type Readable } from "svelte/store";
-import { PaymentSplitter__factory, type PaymentSplitter } from "../contracts";
-import { signer } from "./crypto";
-import { chain } from "./chain";
 import { getContractAddress } from "../config/contracts";
-import { addressesLength, amount } from "./form";
+import { PaymentSplitter__factory, type PaymentSplitter } from "../contracts";
 import { calculatePaymentSplit, calculateRemaining } from "../utils/priceCalculator";
+import { chain } from "./chain";
+import { signer } from "./crypto";
+import { addressesLength, amount } from "./form";
 
 export const contract: Readable<PaymentSplitter> = derived([signer, chain], ([signer, chain]) => {
     const contractAddress = getContractAddress(chain);
