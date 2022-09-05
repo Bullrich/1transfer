@@ -1,4 +1,5 @@
-import { writable } from "svelte/store";
+import { derived, writable, type Readable } from "svelte/store";
+import { getContractAddress } from "../config/contracts";
 import { Chains, changeNetwork } from "../utils/chain";
 
 function createChainStore() {
@@ -15,3 +16,5 @@ function createChainStore() {
     }
 }
 export const chain = createChainStore();
+
+export const validChain: Readable<boolean> = derived(chain, ch => !!getContractAddress(ch));
