@@ -27,9 +27,11 @@ export const price = readable<CurrencyType[]>(null, (set) => {
     }
 })
 
+export type CryptoSymbol = "eth" | "usdt" | "usdc";
+
 interface CurrencyType {
     id: string;
-    symbol: string;
+    symbol: CryptoSymbol;
     name: string;
     image: string;
     current_price: number;
