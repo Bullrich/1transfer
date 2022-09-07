@@ -82,7 +82,7 @@
                 <span class="label-text">Address</span>
             </label>
             {#each $addresses as address, index}
-                <div class="justify-between mt-4 flex">
+                <div class="justify-between mt-4 flex" in:fly={{ y: -20 }}>
                     <input
                         type="text"
                         on:input|preventDefault={(e) => handleAddress(e, index)}
