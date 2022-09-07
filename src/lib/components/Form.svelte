@@ -8,8 +8,9 @@
     let disabled: boolean = true;
 
     function submitEnabled() {
-        console.log($amount, $addresses, $addresses.some((a) => a.length > 0));
-        disabled = !($amount > 0 && $addresses.some((a) => a.length > 0));
+        disabled = !(
+            $amount > 0 && $addresses.filter((a) => a.length > 0).length > 1
+        );
     }
 
     function handleNumber(e: Event) {
@@ -102,8 +103,21 @@
         </div>
         <PriceStat />
         <div class="form-control mt-6">
-            <button class="btn btn-primary" type="submit" on:click={submit} {disabled}>
-                Split crypto
+            <button
+                class="btn btn-primary"
+                type="submit"
+                on:click={submit}
+                {disabled}
+            >
+                {#if !disabled}
+                    Preview Operation
+                {:else if !$amount}
+                    Enter an amount
+                {:else if $addresses.length === 2}
+                    Add at least 2 addresses
+                {:else}
+                    Add an address
+                {/if}
             </button>
         </div>
     </div>
