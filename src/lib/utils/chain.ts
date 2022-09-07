@@ -36,7 +36,7 @@ export const isKnownNetwork = (id:number) => Object.values(Chains).includes(id a
 
 export const changeNetwork = async (chainId: number): Promise<void> => {
     return new Promise((res, rej) => {
-        if (window.ethereum.networkVersion === chainId.toString()) {
+        if (window.ethereum?.networkVersion === chainId.toString()) {
             return res();
         }
         window.ethereum.request({

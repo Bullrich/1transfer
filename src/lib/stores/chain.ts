@@ -3,9 +3,9 @@ import { getContractAddress } from "../config/contracts";
 import { Chains, changeNetwork } from "../utils/chain";
 
 function createChainStore() {
-    const { subscribe, set } = writable<Chains>(parseInt(window.ethereum.networkVersion));
+    const { subscribe, set } = writable<Chains>(parseInt(window.ethereum?.networkVersion));
 
-    window.ethereum.on("chainChanged", (chainId) => {
+    window.ethereum?.on("chainChanged", (chainId) => {
         const idNumber = parseInt(chainId);
         set(idNumber);
     });

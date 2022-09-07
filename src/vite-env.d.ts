@@ -7,7 +7,7 @@ type MetamaskEvent = "chainChanged"
 type RequestParams = { method: EthMethods, params?: any[] };
 
 interface Window {
-    ethereum: {
+    ethereum?: {
         request(req: RequestParams): Promise<any>;
         networkVersion: string;
         // as per https://docs.metamask.io/guide/ethereum-provider.html#chainchanged
