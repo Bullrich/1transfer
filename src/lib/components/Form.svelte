@@ -1,7 +1,9 @@
 <script lang="ts">
-    import Cross from "./Cross.svelte";
+    import Cross from "./icons/Cross.svelte";
     import { addresses, amount } from "../stores/form";
     import { insertInArray } from "../utils/arrayHelper";
+    import { fly } from "svelte/transition";
+    import PriceStat from "./PriceStat.svelte";
 
     let disabled: boolean = true;
 
@@ -41,7 +43,6 @@
         } else {
             $addresses[index] = target.value;
             addresses.set($addresses);
-            console.log($addresses)
         }
 
         submitEnabled();
@@ -99,6 +100,7 @@
                 </div>
             {/each}
         </div>
+        <PriceStat />
         <div class="form-control mt-6">
             <button class="btn btn-primary" type="submit" on:click={submit} {disabled}>
                 Split crypto
