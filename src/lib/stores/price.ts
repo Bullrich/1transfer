@@ -13,19 +13,19 @@ export const fetchLatest = async (): Promise<CurrencyType[]> => {
 /** Remove values not in the interface */
 const cleanPrice = ({ id, symbol, name, image, current_price }: CurrencyType): CurrencyType => ({ id, symbol, name, image, current_price });
 
-export const price = readable<CurrencyType[]>(null, (set) => {
+export const price = readable<CurrencyType[]>(undefined, (set) => {
     const prices = getWithExpiry<CurrencyType[]>(KEY);
     if (prices) {
         set(prices);
     } else {
         fetchLatest().then(fullPrices => {
             const prices = fullPrices.map(cleanPrice);
-            // save the price for 15 minutes
-            setWithExpiry(KEY, prices, 15);
+            // save the price for 30 minutes
+            setWithExpiry(KEY, prices, 30);
             set(prices);
         })
     }
-})
+});
 
 export type CryptoSymbol = "eth" | "usdt" | "usdc";
 
