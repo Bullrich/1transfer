@@ -10,6 +10,14 @@ export enum Chains {
     OPTIMISM_KOVAN = 69
 }
 
+interface ChainData {
+    chainName: string;
+    chainId: string;
+    nativeCurrency: { name: string; decimals: number, symbol: string };
+    rpcUrls: string[];
+    blockExplorerUrls?: string[];
+}
+
 export const getChainCollection = (): { name: string; id: Chains }[] => {
     const collection: { name: string; id: Chains }[] = [];
     for (const chain in Chains) {
