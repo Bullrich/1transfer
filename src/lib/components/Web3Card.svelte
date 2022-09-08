@@ -1,7 +1,6 @@
 <script lang="ts">
     import { chain } from "../stores/chain";
-    import { signer, address } from "../stores/crypto";
-    import { Chains } from "../utils/chain";
+    import { address,signer } from "../stores/crypto";
     import ChainSelect from "./ChainSelect.svelte";
 </script>
 
