@@ -27,15 +27,27 @@ jobs:
     # important, only triggers if tag was created
     if: needs.tag.outputs.tagcreated == 'true'
     steps:
+      - name: Install node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - run: npm install -g generate-changelog
       - name: Checkout code
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Changelog
-        uses: scottbrenner/generate-changelog-action@master
-        id: Changelog
-        env:
-          REPO: ${{ github.repository }}
+      - name: Get previous version
+        id: previous-tag
+        run: |
+          PREVIOUS_TAG=$(git tag | sort -V | tail -n 2 | head -n 1 )
+          echo "::set-output name=previous_tag::$PREVIOUS_TAG"
+      - name: Generate changelog
+        id: changelog
+        run: |
+          changelog=$(generate-changelog -t "${{ steps.previous-tag.outputs.previous_tag }}..${{ needs.tag.outputs.tagname }}" --file -)
+          echo "changelog<<EOF" >> $GITHUB_ENV
+          echo "$changelog" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
       - name: Create Release
         id: create_release
         uses: actions/create-release@main
@@ -46,6 +58,4 @@ jobs:
           release_name: Release ${{ needs.tag.outputs.tagname }}
           body: |
             ## Changes
-            ${{ steps.Changelog.outputs.changelog }}
-          draft: false
-          prerelease: false
+            ${{ env.changelog }}
