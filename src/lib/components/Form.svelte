@@ -4,14 +4,17 @@
     import { insertInArray } from "../utils/arrayHelper";
     import { fly } from "svelte/transition";
     import PriceStat from "./PriceStat.svelte";
+    import ConfirmationModal from "./ConfirmationModal.svelte";
 
-    let disabled: boolean = true;
+    $: disabled = !(
+        $amount > 0 && $addresses.filter((a) => a.length > 0).length > 1
+    );
 
-    function submitEnabled() {
-        disabled = !(
-            $amount > 0 && $addresses.filter((a) => a.length > 0).length > 1
-        );
-    }
+    $: btnMessage = !$amount
+        ? "Enter an amount"
+        : $addresses.length === 2
+        ? "Add at least 2 addresses"
+        : "Add an address";
 
     function handleNumber(e: Event) {
         let oldValue = $amount ?? 0;
@@ -23,7 +26,6 @@
         } else {
             target.value = oldValue.toString();
         }
-        submitEnabled();
     }
 
     function handleAddress(e: Event, index: number) {
@@ -45,8 +47,6 @@
             $addresses[index] = target.value;
             addresses.set($addresses);
         }
-
-        submitEnabled();
     }
 
     function removeAddress(index: number) {
@@ -54,10 +54,6 @@
 
         add.splice(index, 1);
         addresses.set(add);
-    }
-
-    function submit() {
-        console.log("sending", $amount, $addresses);
     }
 </script>
 
@@ -103,22 +99,16 @@
         </div>
         <PriceStat />
         <div class="form-control mt-6">
-            <button
-                class="btn btn-primary"
-                type="submit"
-                on:click={submit}
-                {disabled}
-            >
-                {#if !disabled}
+            <ConfirmationModal />
+            {#if !disabled}
+                <label for="confirmation-modal" class="btn btn-primary">
                     Preview Operation
-                {:else if !$amount}
-                    Enter an amount
-                {:else if $addresses.length === 2}
-                    Add at least 2 addresses
-                {:else}
-                    Add an address
-                {/if}
-            </button>
+                </label>
+            {:else}
+                <button class="btn btn-primary" {disabled}>
+                    {btnMessage}
+                </button>
+            {/if}
         </div>
     </div>
 </div>
