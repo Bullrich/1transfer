@@ -7,7 +7,8 @@ export enum Chains {
     POLYGON = 137,
     MUMBAI = 80001,
     OPTIMISM = 10,
-    OPTIMISM_KOVAN = 69
+    OPTIMISM_KOVAN = 69,
+    OPTIMISM_GOERLI = 420
 }
 
 interface ChainData {
