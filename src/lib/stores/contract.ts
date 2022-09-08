@@ -10,7 +10,7 @@ export const contract: Readable<PaymentSplitter> = derived([signer, chain], ([si
     const contractAddress = getContractAddress(chain);
     if (contractAddress && signer) {
         console.log("got contract")
-        return PaymentSplitter__factory.connect(contractAddress, signer)
+        return PaymentSplitter__factory.connect(contractAddress, signer);
     }
 });
 

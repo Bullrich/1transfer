@@ -1,16 +1,19 @@
 <script lang="ts">
     import Cross from "./icons/Cross.svelte";
     import { addresses, amount } from "../stores/form";
+    import { contract } from "../stores/contract";
     import { insertInArray } from "../utils/arrayHelper";
     import { fly } from "svelte/transition";
     import PriceStat from "./PriceStat.svelte";
     import ConfirmationModal from "./ConfirmationModal.svelte";
 
-    $: disabled = !(
-        $amount > 0 && $addresses.filter((a) => a.length > 0).length > 1
-    );
+    $: disabled =
+        !$contract ||
+        !($amount > 0 && $addresses.filter((a) => a.length > 0).length > 1);
 
-    $: btnMessage = !$amount
+    $: btnMessage = !$contract
+        ? "Network not supported"
+        : !$amount
         ? "Enter an amount"
         : $addresses.length === 2
         ? "Add at least 2 addresses"
