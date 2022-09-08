@@ -1,15 +1,31 @@
 <script lang="ts">
-    import { remaining, splitPayment } from "../stores/contract";
-    import { addresses, amount } from "../stores/form";
+    import { utils } from "ethers";
+    import { contract,remaining,splitPayment } from "../stores/contract";
+    import { addresses,amount } from "../stores/form";
     import { price } from "../stores/price";
 
     $: parsedAddresses = $addresses.filter((a) => a.length > 0);
+
+    let loading = false;
+    let btnMessage = "Approve operation";
 
     $: remainingPrice =
         $remaining !== "0.0"
             ? parseFloat($remaining) *
               $price.find((p) => p.symbol === "eth").current_price
             : 0;
+
+    async function executeSplitPayment() {
+        loading = true;
+        btnMessage = "Waiting for user approval";
+        console.log("yes", loading, btnMessage);
+        const tx = await $contract.splitPayment(parsedAddresses, {
+            value: utils.parseEther($amount.toString()),
+        });
+        btnMessage = "Waiting for transaction to finish";
+        await tx.wait();
+        btnMessage = "Transaction completed!";
+    }
 </script>
 
 <input type="checkbox" id="confirmation-modal" class="modal-toggle" />
@@ -51,7 +67,13 @@
             <label for="confirmation-modal" class="btn btn-warning w-half">
                 Cancel
             </label>
-            <button class="btn btn-success w-half">Approve operation</button>
+            <button
+                class="btn btn-success w-half"
+                disabled={!$contract || loading}
+                on:click={executeSplitPayment}
+            >
+                {btnMessage}
+            </button>
         </div>
     </div>
 </div>
