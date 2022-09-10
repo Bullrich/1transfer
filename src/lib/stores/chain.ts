@@ -1,6 +1,7 @@
 import { derived, writable, type Readable } from "svelte/store";
 import { getContractAddress } from "../config/contracts";
-import { Chains, changeNetwork } from "../utils/chain";
+import { changeNetwork } from "../utils/chain";
+import type { Chains } from "../utils/chains/chain";
 
 function createChainStore() {
     const { subscribe, set } = writable<Chains>(parseInt(window.ethereum?.networkVersion));

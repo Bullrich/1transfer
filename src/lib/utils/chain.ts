@@ -1,23 +1,6 @@
 import { utils } from "ethers";
-
-export enum Chains {
-    MAINNET = 1,
-    RINKEBY = 4,
-    ROPSTEN = 3,
-    POLYGON = 137,
-    MUMBAI = 80001,
-    OPTIMISM = 10,
-    OPTIMISM_KOVAN = 69,
-    OPTIMISM_GOERLI = 420
-}
-
-interface ChainData {
-    chainName: string;
-    chainId: string;
-    nativeCurrency: { name: string; decimals: number, symbol: string };
-    rpcUrls: string[];
-    blockExplorerUrls?: string[];
-}
+import { getChain } from "./chains";
+import { Chains } from "./chains/chain";
 
 export const getChainCollection = (): { name: string; id: Chains }[] => {
     const collection: { name: string; id: Chains }[] = [];
@@ -33,7 +16,7 @@ export const getChainCollection = (): { name: string; id: Chains }[] => {
 }
 
 /** Returns true if the network is inside our list of enum networks */
-export const isKnownNetwork = (id:number) => Object.values(Chains).includes(id as Chains);
+export const isKnownNetwork = (id: number) => Object.values(Chains).includes(id as Chains);
 
 export const changeNetwork = async (chainId: number): Promise<void> => {
     return new Promise((res, rej) => {

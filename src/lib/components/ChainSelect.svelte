@@ -1,7 +1,8 @@
 <script lang="ts">
     import { onDestroy } from "svelte";
     import { chain } from "../stores/chain";
-    import { Chains, getChainCollection, isKnownNetwork } from "../utils/chain";
+    import { getChainCollection, isKnownNetwork } from "../utils/chain";
+    import type { Chains } from "../utils/chains/chain";
 
     const collection = getChainCollection();
     let bindValue: Chains = $chain;
