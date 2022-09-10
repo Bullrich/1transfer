@@ -1,6 +1,7 @@
 <script lang="ts">
   import Form from "./components/Form.svelte";
   import PricePreview from "./components/PricePreview.svelte";
+  import Toast from "./components/Toast.svelte";
 </script>
 
 <div class="hero min-h-full flex-grow bg-base-200">
@@ -9,5 +10,6 @@
       <PricePreview />
     </div>
     <Form />
+    <Toast />
   </div>
 </div>

@@ -3,6 +3,7 @@
     import { contract,remaining,splitPayment } from "../stores/contract";
     import { addresses,amount } from "../stores/form";
     import { price } from "../stores/price";
+    import { toast } from "../stores/toast";
 
     $: parsedAddresses = $addresses.filter((a) => a.length > 0);
 
@@ -25,6 +26,7 @@
         btnMessage = "Waiting for transaction to finish";
         await tx.wait();
         btnMessage = "Transaction completed!";
+        toast.push("Transaction completed", "alert-success");
     }
 </script>
 
