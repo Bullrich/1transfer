@@ -31,6 +31,12 @@
 <input type="checkbox" id="confirmation-modal" class="modal-toggle" />
 <div class="modal">
     <div class="modal-box w-11/12 max-w-5xl">
+        <label
+            for="confirmation-modal"
+            class="btn btn-sm btn-circle absolute right-2 top-2"
+        >
+            ✕
+        </label>
         <h3 class="font-bold text-lg">Confirm operation</h3>
         <p class="py-4">
             The following operation will split an amount of {$amount} ETH into {parsedAddresses.length}
@@ -85,9 +91,6 @@
             </table>
         </div>
         <div class="modal-action">
-            <label for="confirmation-modal" class="btn btn-warning w-half">
-                Cancel
-            </label>
             <button
                 class="btn btn-success w-half"
                 disabled={!$contract || loading}
