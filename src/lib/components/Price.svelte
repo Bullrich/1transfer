@@ -6,7 +6,7 @@
     export let currency: CurrencyType;
 
     const priceValue = `1 ${currency.symbol} = ${currency.current_price}$`;
-    const usdValue = stringToUsd(amount, currency);
+    $: usdValue = stringToUsd(amount, currency);
 </script>
 
 <div class="tooltip tooltip-left" data-tip={priceValue}>

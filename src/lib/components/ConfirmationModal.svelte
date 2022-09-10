@@ -8,6 +8,8 @@
     $: parsedAddresses = $addresses.filter((a) => a.length > 0);
 
     $: fee = Number($remaining) > 0;
+
+    $: currency = $price.get("eth");
 </script>
 
 <input type="checkbox" id="confirmation-modal" class="modal-toggle" />
@@ -28,7 +30,7 @@
         {#if fee}
             <p class="py-4">
                 A remaining fee of
-                <Price amount={$remaining} currency={$price.get("eth")} />
+                <Price amount={$remaining} {currency} />
                 will be taken
             </p>
         {/if}
@@ -49,10 +51,7 @@
                             <td>{address}</td>
                             <td>{$splitPayment}</td>
                             <td>
-                                <Price
-                                    amount={$splitPayment}
-                                    currency={$price.get("eth")}
-                                />
+                                <Price amount={$splitPayment} {currency} />
                             </td>
                         </tr>
                     {/each}
@@ -62,10 +61,7 @@
                             <td>Fee</td>
                             <td>{$remaining}</td>
                             <td>
-                                <Price
-                                    amount={$remaining}
-                                    currency={$price.get("eth")}
-                                />
+                                <Price amount={$remaining} {currency} />
                             </td>
                         </tr>
                     {/if}
