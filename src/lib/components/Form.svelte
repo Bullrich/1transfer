@@ -1,7 +1,7 @@
 <script lang="ts">
     import { fly } from "svelte/transition";
+    import { ethBalance } from "../stores/balance";
     import { contract } from "../stores/contract";
-    import { ethBalance } from "../stores/crypto";
     import { addresses, amount } from "../stores/form";
     import { insertInArray } from "../utils/arrayHelper";
     import ConfirmationModal from "./ConfirmationModal.svelte";
