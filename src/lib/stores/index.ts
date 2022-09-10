@@ -1,1 +1,1 @@
-export const APP_NAME = "Crypto Split";
+export const APP_NAME = "1 TRANSFER";

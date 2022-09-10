@@ -78,7 +78,7 @@
         </div>
         <div class="form-control">
             <label class="label" for="address">
-                <span class="label-text">Address</span>
+                <span class="label-text">Addresses</span>
             </label>
             {#each $addresses as address, index}
                 <div class="justify-between mt-4 flex" in:fly={{ y: -20 }}>

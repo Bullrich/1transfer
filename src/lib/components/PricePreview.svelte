@@ -11,9 +11,9 @@
             receive {$splitPayment} and the difference is {$remaining}
         </p>
     {:else}
-        <h1 class="text-5xl font-bold">Split payment</h1>
+        <h1 class="text-5xl font-bold">1 Transfer</h1>
         <p class="py-6">
-            Split your crypto payment equally between different accounts!
+            Send crypto to many addresses in 1 transfer.
         </p>
     {/if}
 </div>
