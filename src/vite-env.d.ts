@@ -12,5 +12,6 @@ interface Window {
         networkVersion: string;
         // as per https://docs.metamask.io/guide/ethereum-provider.html#chainchanged
         on(MetamaskEvent, handler: (chainId: string) => void);
+        enable(): Promise<void>;
     }
 }

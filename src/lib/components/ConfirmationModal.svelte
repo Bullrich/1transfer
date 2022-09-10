@@ -9,7 +9,7 @@
 
     $: fee = Number($remaining) > 0;
 
-    $: currency = $price.get("eth");
+    $: currency = $price?.get("eth");
 </script>
 
 <input type="checkbox" id="confirmation-modal" class="modal-toggle" />

@@ -1,9 +1,16 @@
 import { derived, readable, writable, type Readable } from "svelte/store";
-import { getSigner } from "../utils/wallet";
+import { getAccounts, getSigner } from "../utils/wallet";
 import type { JsonRpcSigner } from "@ethersproject/providers";
 
 function createSigner() {
     const { subscribe, set } = writable<JsonRpcSigner>();
+
+    getAccounts().then(async accounts => {
+        // If accounts exist then the user has already authorized the application
+        if(accounts && accounts.length > 0){
+            getSigner().then(set);
+        }
+    })
 
     return {
         subscribe,
