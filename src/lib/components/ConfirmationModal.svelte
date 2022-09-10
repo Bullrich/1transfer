@@ -1,20 +1,18 @@
 <script lang="ts">
     import { utils } from "ethers";
-    import { contract,remaining,splitPayment } from "../stores/contract";
-    import { addresses,amount } from "../stores/form";
+    import { chain } from "../stores/chain";
+    import { contract, remaining, splitPayment } from "../stores/contract";
+    import { addresses, amount } from "../stores/form";
     import { price } from "../stores/price";
     import { toast } from "../stores/toast";
+    import Price from "./Price.svelte";
 
     $: parsedAddresses = $addresses.filter((a) => a.length > 0);
 
+    $: fee = Number($remaining) > 0;
+
     let loading = false;
     let btnMessage = "Approve operation";
-
-    $: remainingPrice =
-        $remaining !== "0.0"
-            ? parseFloat($remaining) *
-              $price.find((p) => p.symbol === "eth").current_price
-            : 0;
 
     async function executeSplitPayment() {
         loading = true;
@@ -39,13 +37,12 @@
             accounts.
         </p>
         <p class="py-4">Each account will receive {$splitPayment} ETH</p>
-        {#if remainingPrice > 0}
-            <p class="py-4">A remaining fee of</p>
-            <div class="tooltip tooltip-left" data-tip={$remaining}>
-                <kbd class="kbd kbd-sm">{remainingPrice.toFixed(2)}$</kbd>
+        {#if fee}
+            <p class="py-4">
+                A remaining fee of
+                <Price amount={$remaining} currency={$price.get("eth")} />
                 will be taken
-            </div>
-            <!-- </p> -->
+            </p>
         {/if}
         <div class="overflow-x-auto mt-6">
             <table class="table w-full">
@@ -53,6 +50,8 @@
                     <tr>
                         <th>NR</th>
                         <th>Address</th>
+                        <th>Amount</th>
+                        <th>Price</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -60,8 +59,28 @@
                         <tr>
                             <th>{index + 1}</th>
                             <td>{address}</td>
+                            <td>{$splitPayment}</td>
+                            <td>
+                                <Price
+                                    amount={$splitPayment}
+                                    currency={$price.get("eth")}
+                                />
+                            </td>
                         </tr>
                     {/each}
+                    {#if fee}
+                        <tr>
+                            <th>{parsedAddresses.length + 1}</th>
+                            <td>Fee</td>
+                            <td>{$remaining}</td>
+                            <td>
+                                <Price
+                                    amount={$remaining}
+                                    currency={$price.get("eth")}
+                                />
+                            </td>
+                        </tr>
+                    {/if}
                 </tbody>
             </table>
         </div>
