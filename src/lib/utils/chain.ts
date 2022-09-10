@@ -33,3 +33,12 @@ export const changeNetwork = async (chainId: number): Promise<void> => {
             });
     });
 }
+
+export const getTxAddress = (chain: Chains, txHash: string) => {
+    console.log("chain and hash", chain, txHash)
+    const data = getChain(chain);
+    if (!data) {
+        return "";
+    }
+    return data.blockExplorerUrls[0] + "tx/" + txHash;
+}

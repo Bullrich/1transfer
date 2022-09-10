@@ -1,31 +1,13 @@
 <script lang="ts">
-    import { utils } from "ethers";
-    import { chain } from "../stores/chain";
-    import { contract, remaining, splitPayment } from "../stores/contract";
+    import { remaining, splitPayment } from "../stores/contract";
     import { addresses, amount } from "../stores/form";
     import { price } from "../stores/price";
-    import { toast } from "../stores/toast";
+    import ContractButton from "./ContractButton.svelte";
     import Price from "./Price.svelte";
 
     $: parsedAddresses = $addresses.filter((a) => a.length > 0);
 
     $: fee = Number($remaining) > 0;
-
-    let loading = false;
-    let btnMessage = "Approve operation";
-
-    async function executeSplitPayment() {
-        loading = true;
-        btnMessage = "Waiting for user approval";
-        console.log("yes", loading, btnMessage);
-        const tx = await $contract.splitPayment(parsedAddresses, {
-            value: utils.parseEther($amount.toString()),
-        });
-        btnMessage = "Waiting for transaction to finish";
-        await tx.wait();
-        btnMessage = "Transaction completed!";
-        toast.push("Transaction completed", "alert-success");
-    }
 </script>
 
 <input type="checkbox" id="confirmation-modal" class="modal-toggle" />
@@ -91,13 +73,7 @@
             </table>
         </div>
         <div class="modal-action">
-            <button
-                class="btn btn-success w-half"
-                disabled={!$contract || loading}
-                on:click={executeSplitPayment}
-            >
-                {btnMessage}
-            </button>
+            <ContractButton totalAmount={$amount} addresses={parsedAddresses} />
         </div>
     </div>
 </div>
