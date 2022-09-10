@@ -1,15 +1,18 @@
 <script lang="ts">
-    import Cross from "./icons/Cross.svelte";
-    import { addresses, amount } from "../stores/form";
-    import { contract } from "../stores/contract";
-    import { insertInArray } from "../utils/arrayHelper";
     import { fly } from "svelte/transition";
-    import PriceStat from "./PriceStat.svelte";
+    import { contract } from "../stores/contract";
+    import { ethBalance } from "../stores/crypto";
+    import { addresses, amount } from "../stores/form";
+    import { insertInArray } from "../utils/arrayHelper";
     import ConfirmationModal from "./ConfirmationModal.svelte";
+    import Cross from "./icons/Cross.svelte";
+    import PriceStat from "./PriceStat.svelte";
 
     $: disabled =
         !$contract ||
         !($amount > 0 && $addresses.filter((a) => a.length > 0).length > 1);
+
+    $: setBalance = $amount;
 
     $: btnMessage = !$contract
         ? "Network not supported"
@@ -52,6 +55,10 @@
         }
     }
 
+    function setMaxBalance() {
+        amount.set(parseFloat($ethBalance));
+    }
+
     function removeAddress(index: number) {
         const add = $addresses;
 
@@ -70,11 +77,20 @@
                 type="number"
                 on:input|preventDefault={handleNumber}
                 placeholder="0"
+                bind:value={setBalance}
                 min="0.00002"
                 id="amount"
                 required
                 class="input input-bordered"
             />
+            {#if $ethBalance}
+                <label class="label" for="amount">
+                    <span class="label-text-alt">Balance {$ethBalance}</span>
+                    <span class="label-text-alt" on:click={setMaxBalance}>
+                        Max
+                    </span>
+                </label>
+            {/if}
         </div>
         <div class="form-control">
             <label class="label" for="address">
