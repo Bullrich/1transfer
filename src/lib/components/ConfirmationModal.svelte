@@ -73,9 +73,3 @@
         </div>
     </div>
 </div>
-
-<style>
-    .w-half {
-        width: 50%;
-    }
-</style>
