@@ -18,16 +18,22 @@ function cryptoArrayToMap(currencies: CurrencyType[]): Map<CryptoSymbol, Currenc
 const cleanPrice = ({ id, symbol, name, image, current_price }: CurrencyType): CurrencyType => ({ id, symbol, name, image, current_price });
 
 export const price = readable<Map<CryptoSymbol, CurrencyType>>(undefined, (set) => {
-    const prices = getWithExpiry<CurrencyType[]>(KEY);
-    if (prices) {
-        set(cryptoArrayToMap(prices));
-    } else {
+    const prices = getWithExpiry<CurrencyType[]>(KEY, false);
+    if (!prices || prices.expired) {
         fetchLatest().then(fullPrices => {
             const prices = fullPrices.map(cleanPrice);
             // save the price for 30 minutes
             setWithExpiry(KEY, prices, 30);
             set(cryptoArrayToMap(prices));
+        }).catch(e => {
+            console.error("Error fetching prices", e);
+            if (prices.data) {
+                console.warn("Using expired data as backup");
+                set(cryptoArrayToMap(prices.data));
+            }
         })
+    } else {
+        set(cryptoArrayToMap(prices.data));
     }
 });
 
