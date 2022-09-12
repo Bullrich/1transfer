@@ -1,6 +1,8 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.9;
 
+import "@openzeppelin/contracts/interfaces/IERC20.sol";
+
 contract PaymentSplitter {
     address private owner;
     uint256 private surplus;
@@ -19,6 +21,11 @@ contract PaymentSplitter {
         require(b > 0, "Value can not be zero");
         require(a > b, "Divisible can not be less than divisor");
         return a % b;
+    }
+
+    function getUserTokenBalance(IERC20 token) public view returns (uint) {
+        uint tokenBalance = token.balanceOf(msg.sender);
+        return tokenBalance;
     }
 
     // Calculate the modular value into the 0.01 field of 1 eth.
