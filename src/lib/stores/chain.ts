@@ -6,7 +6,7 @@ import type { Chains } from "../utils/chains/chain";
 function createChainStore() {
     const { subscribe, set } = writable<Chains>(parseInt(window.ethereum?.networkVersion));
 
-    window.ethereum?.on("chainChanged", window.location.reload);
+    window.ethereum?.on("chainChanged", () => window.location.reload());
 
     return {
         subscribe,
