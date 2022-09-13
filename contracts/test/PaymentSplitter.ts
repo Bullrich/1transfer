@@ -129,5 +129,22 @@ describe("PaymentSplitter", function () {
             const surplus = await splitter.getSurplus();
             expect(surplus).to.equal(remaining);
         });
+
+        it("Should withdraw surplus", async function () {
+            const ethToSplit = 0.9;
+            const accountToSplit = 7;
+            const { splitter, owner, accounts } = await loadFixture(deployPaymentSplitterFixture);
+            const remaining = await splitter.calculateRemaining(ethers.utils.parseEther(ethToSplit.toString()), accountToSplit);
+            const randomAccounts = getMultipleRandom(accounts, accountToSplit);
+            const addresses = await Promise.all(randomAccounts.map(acc => acc.getAddress()));
+
+            const value = ethers.utils.parseEther(ethToSplit.toString());
+            await splitter.splitPayment(addresses, { value });
+
+            const surplus = await splitter.getSurplus();
+            expect(surplus).to.equal(remaining);
+
+            expect(await splitter.withdrawSurplus()).to.changeEtherBalance(owner, remaining);
+        });
     })
 });

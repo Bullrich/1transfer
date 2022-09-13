@@ -17,6 +17,13 @@ contract PaymentSplitter {
         return surplus;
     }
 
+    function withdrawSurplus() external {
+        require(msg.sender == owner, "Call is not the owner");
+        address payable own = payable(owner);
+        own.transfer(surplus);
+        surplus = 0;
+    }
+
    function modulo(uint256 a, uint256 b) public pure returns (uint256) {
         require(b > 0, "Value can not be zero");
         require(a > b, "Divisible can not be less than divisor");
