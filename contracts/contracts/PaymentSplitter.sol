@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/interfaces/IERC20.sol";
 contract PaymentSplitter {
     address private owner;
     uint256 private surplus;
-    uint256 private constant ethMultiplier = 100000 gwei;
+    uint256 private constant ethDecimals = 18;
 
     constructor() {
         owner = msg.sender;
@@ -37,7 +37,7 @@ contract PaymentSplitter {
 
     // Calculate the modular value into the 0.01 field of 1 eth.
     function calculateRemaining(uint amount, uint recipients) public pure returns (uint) {
-        return modulo(amount, recipients * ethMultiplier);
+        return modulo(amount, recipients * (10 **  (ethDecimals - 4)));
     }
 
     // Calculate an equal division value
