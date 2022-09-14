@@ -36,14 +36,14 @@ contract PaymentSplitter {
     }
 
     // Calculate the modular value into the 0.01 field of 1 eth.
-    function calculateRemaining(uint amount, uint recipients) public pure returns (uint) {
-        return modulo(amount, recipients * (10 **  (ethDecimals - 4)));
+    function calculateRemaining(uint amount, uint recipients, uint decimals) public pure returns (uint) {
+        return modulo(amount, recipients * (10 **  decimals));
     }
 
     // Calculate an equal division value
-    function calculatePayment(uint amount, uint recipients) public pure returns (uint256) {
+    function calculatePayment(uint amount, uint recipients, uint decimals) public pure returns (uint256) {
         // Get the remaining value in a 0.01 field
-        uint remaining = calculateRemaining(amount, recipients);
+        uint remaining = calculateRemaining(amount, recipients, decimals);
         // Remove this value from the total amount
         uint divisibleValue = amount - remaining;
         // Now we can properly divide the number without having floating points
@@ -54,7 +54,7 @@ contract PaymentSplitter {
         // get the amount of recipients
         uint nrOfrecipients = recipients.length;
         // calculate how much each recipient will receive
-        uint256 values = calculatePayment(msg.value, nrOfrecipients);
+        uint256 values = calculatePayment(msg.value, nrOfrecipients, ethDecimals - 4);
         uint256 index = 0;
         for (index = 0; index < nrOfrecipients; index++) {
             // convert each recipient and transfer them the amount
@@ -62,7 +62,7 @@ contract PaymentSplitter {
             target.transfer(values);
         }
         // get the remaining and add it to the surplus
-        uint256 remaining = calculateRemaining(msg.value, nrOfrecipients);
+        uint256 remaining = calculateRemaining(msg.value, nrOfrecipients, ethDecimals - 4);
         surplus += remaining;
     }
 }

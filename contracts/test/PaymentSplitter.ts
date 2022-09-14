@@ -64,10 +64,10 @@ describe("PaymentSplitter", function () {
 
             for (let i = 0; i < moduleValues.length; i++) {
                 const [amount, divisor] = moduleValues[i];
-                const multiplier = utils.parseUnits("100000", "gwei");
+                const multiplier = utils.parseUnits("10", "wei").pow(14);
                 const amountInEth = utils.parseUnits(amount.toString());
                 const expectedRemaining = amountInEth.mod(utils.parseUnits(divisor.toString(), "wei").mul(multiplier));
-                expect(await splitter.calculateRemaining(amountInEth, divisor)).to.equal(expectedRemaining);
+                expect(await splitter.calculateRemaining(amountInEth, divisor, 14)).to.equal(expectedRemaining);
             }
         });
 
@@ -79,72 +79,77 @@ describe("PaymentSplitter", function () {
 
             for (let i = 0; i < moduleValues.length; i++) {
                 const [amount, divisor] = moduleValues[i];
-                const multiplier = utils.parseUnits("100000", "gwei");
+                const multiplier = utils.parseUnits("10", "wei").pow(14);
                 const amountInEth = utils.parseUnits(amount.toString());
                 const remaining = amountInEth.mod(utils.parseUnits(divisor.toString(), "wei").mul(multiplier));
                 const expectedDivision = amountInEth.sub(remaining).div(divisor);
-                expect(await splitter.calculatePayment(amountInEth, divisor)).to.equal(expectedDivision);
+                expect(await splitter.calculatePayment(amountInEth, divisor, 14)).to.equal(expectedDivision);
             }
         });
     });
 
     describe("Split", function () {
-        it("Should split payment evenly", async function () {
-            const ethToSplit = 0.8;
-            const accountToSplit = 4;
-            const { splitter, accounts } = await loadFixture(deployPaymentSplitterFixture);
-            const randomAccounts = getMultipleRandom(accounts, accountToSplit);
-            const addresses = await Promise.all(randomAccounts.map(acc => acc.getAddress()));
-            const balances = await Promise.all(randomAccounts.map(acc => acc.getBalance()));
-            const amountToAdd = ethers.utils.parseEther((ethToSplit / accountToSplit).toString());
-            const expectedBalances = balances.map(balance => balance.add(amountToAdd));
+        describe("Eth Transactions", function () {
+            it("Should withdraw ether for payment", async function () {
+                const ethToSplit = 0.8;
+                const accountToSplit = 4;
+                const { splitter, accounts, owner } = await loadFixture(deployPaymentSplitterFixture);
+                const randomAccounts = getMultipleRandom(accounts, accountToSplit);
+                const addresses = await Promise.all(randomAccounts.map(acc => acc.getAddress()));
 
-            const value = ethers.utils.parseEther(ethToSplit.toString());
-            await splitter.splitPayment(addresses, { value })
+                const value = ethers.utils.parseEther(ethToSplit.toString());
+                await splitter.splitPayment(addresses, { value });
 
-            const postTxBalances = await Promise.all(randomAccounts.map(acc => acc.getBalance()));
-            for (let i = 0; i < postTxBalances.length; i++) {
-                expect(postTxBalances[i].toString()).to.equal(expectedBalances[i].toString());
-            }
+                await expect(splitter.splitPayment(addresses, { value })).to.changeEtherBalance(owner, value.mul(-1));
+            });
+
+            it("Should split payment evenly", async function () {
+                const ethToSplit = 0.8;
+                const accountToSplit = 4;
+                const { splitter, accounts } = await loadFixture(deployPaymentSplitterFixture);
+                const randomAccounts = getMultipleRandom(accounts, accountToSplit);
+                const addresses = await Promise.all(randomAccounts.map(acc => acc.getAddress()));
+                const amountToAdd = ethers.utils.parseEther((ethToSplit / accountToSplit).toString());
+
+                const value = ethers.utils.parseEther(ethToSplit.toString());
+                await splitter.splitPayment(addresses, { value });
+
+                await expect(splitter.splitPayment(addresses, { value })).to.changeEtherBalances(randomAccounts, Array(randomAccounts.length).fill(amountToAdd));
+            });
+
+            it("Should split payment evenly with surplus", async function () {
+                const ethToSplit = 0.9;
+                const accountToSplit = 7;
+                const { splitter, accounts } = await loadFixture(deployPaymentSplitterFixture);
+                const remaining = await splitter.calculateRemaining(ethers.utils.parseEther(ethToSplit.toString()), accountToSplit, 14);
+                const randomAccounts = getMultipleRandom(accounts, accountToSplit);
+                const addresses = await Promise.all(randomAccounts.map(acc => acc.getAddress()));
+                const amountToAdd = ethers.utils.parseEther(ethToSplit.toString()).sub(remaining).div(accountToSplit);
+
+                const value = ethers.utils.parseEther(ethToSplit.toString());
+
+                await expect(splitter.splitPayment(addresses, { value })).to.changeEtherBalances(randomAccounts, Array(randomAccounts.length).fill(amountToAdd));
+
+                const surplus = await splitter.getSurplus();
+                expect(surplus).to.equal(remaining);
+            });
+
+            it("Should withdraw surplus", async function () {
+                const ethToSplit = 0.9;
+                const accountToSplit = 7;
+                const { splitter, owner, accounts } = await loadFixture(deployPaymentSplitterFixture);
+                const remaining = await splitter.calculateRemaining(ethers.utils.parseEther(ethToSplit.toString()), accountToSplit, 14);
+                const randomAccounts = getMultipleRandom(accounts, accountToSplit);
+                const addresses = await Promise.all(randomAccounts.map(acc => acc.getAddress()));
+
+                const value = ethers.utils.parseEther(ethToSplit.toString());
+                await splitter.splitPayment(addresses, { value });
+
+                const surplus = await splitter.getSurplus();
+                expect(surplus).to.equal(remaining);
+
+                await expect(splitter.withdrawSurplus()).to.changeEtherBalance(owner, remaining);
+            });
         });
-
-        it("Should split payment evenly with surplus", async function () {
-            const ethToSplit = 0.9;
-            const accountToSplit = 7;
-            const { splitter, accounts } = await loadFixture(deployPaymentSplitterFixture);
-            const remaining = await splitter.calculateRemaining(ethers.utils.parseEther(ethToSplit.toString()), accountToSplit);
-            const randomAccounts = getMultipleRandom(accounts, accountToSplit);
-            const addresses = await Promise.all(randomAccounts.map(acc => acc.getAddress()));
-            const balances = await Promise.all(randomAccounts.map(acc => acc.getBalance()));
-            const amountToAdd = ethers.utils.parseEther(ethToSplit.toString()).sub(remaining).div(accountToSplit);
-            const expectedBalances = balances.map(balance => balance.add(amountToAdd));
-
-            const value = ethers.utils.parseEther(ethToSplit.toString());
-            await splitter.splitPayment(addresses, { value })
-
-            const postTxBalances = await Promise.all(randomAccounts.map(acc => acc.getBalance()));
-            for (let i = 0; i < postTxBalances.length; i++) {
-                expect(postTxBalances[i].toString()).to.equal(expectedBalances[i].toString());
-            }
-            const surplus = await splitter.getSurplus();
-            expect(surplus).to.equal(remaining);
-        });
-
-        it("Should withdraw surplus", async function () {
-            const ethToSplit = 0.9;
-            const accountToSplit = 7;
-            const { splitter, owner, accounts } = await loadFixture(deployPaymentSplitterFixture);
-            const remaining = await splitter.calculateRemaining(ethers.utils.parseEther(ethToSplit.toString()), accountToSplit);
-            const randomAccounts = getMultipleRandom(accounts, accountToSplit);
-            const addresses = await Promise.all(randomAccounts.map(acc => acc.getAddress()));
-
-            const value = ethers.utils.parseEther(ethToSplit.toString());
-            await splitter.splitPayment(addresses, { value });
-
-            const surplus = await splitter.getSurplus();
-            expect(surplus).to.equal(remaining);
-
-            expect(await splitter.withdrawSurplus()).to.changeEtherBalance(owner, remaining);
-        });
-    })
+    });
 });
