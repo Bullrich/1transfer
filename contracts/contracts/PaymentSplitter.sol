@@ -1,7 +1,7 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.9;
 
-import "@openzeppelin/contracts/interfaces/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract PaymentSplitter {
     address private owner;
@@ -64,5 +64,22 @@ contract PaymentSplitter {
         // get the remaining and add it to the surplus
         uint256 remaining = calculateRemaining(msg.value, nrOfrecipients, ethDecimals - 4);
         surplus += remaining;
+    }
+
+    function splitTokenPayment(address[] memory recipients, uint256 amount, ERC20 token) public {
+        require(token.allowance(msg.sender, address(this)) >= amount, "Insuficient Allowance");
+        require(token.transferFrom(msg.sender, address(this),amount), "Transfer Failed");
+
+        uint nrOfrecipients = recipients.length;
+        // see if the values has enough decimals to split evenly
+        uint decimals = token.decimals();
+        uint decimalsToDivide = decimals > 4 ? decimals - 2 : decimals;
+        // calculate how much each recipient will receive
+        uint256 values = calculatePayment(amount, nrOfrecipients, decimalsToDivide);
+        uint256 index = 0;
+        for (index = 0; index < nrOfrecipients; index++) {
+            // transfer to each recipient the mentioned amount
+            token.transfer(recipients[index], values);
+        }
     }
 }

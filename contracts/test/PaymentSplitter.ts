@@ -15,7 +15,10 @@ describe("PaymentSplitter", function () {
         const PaymentSplitter = await ethers.getContractFactory("PaymentSplitter");
         const splitter = await PaymentSplitter.deploy();
 
-        return { splitter, owner, accounts };
+        const DemoToken = await ethers.getContractFactory("DemoToken");
+        const token = await DemoToken.deploy();
+
+        return { splitter, owner, accounts, token };
     }
 
     /** Get multiple random values except the first one */
@@ -26,6 +29,10 @@ describe("PaymentSplitter", function () {
         const shuffled = [...arr].slice(1).sort(() => 0.5 - Math.random());
 
         return shuffled.slice(0, num);
+    }
+
+    function fillArray<T>(element: T, num: number): T[] {
+        return new Array<T>(num).fill(element);
     }
 
     describe("Deployment", function () {
@@ -109,12 +116,12 @@ describe("PaymentSplitter", function () {
                 const { splitter, accounts } = await loadFixture(deployPaymentSplitterFixture);
                 const randomAccounts = getMultipleRandom(accounts, accountToSplit);
                 const addresses = await Promise.all(randomAccounts.map(acc => acc.getAddress()));
-                const amountToAdd = ethers.utils.parseEther((ethToSplit / accountToSplit).toString());
+                const amountToAdd = fillArray(ethers.utils.parseEther((ethToSplit / accountToSplit).toString()), accountToSplit);
 
                 const value = ethers.utils.parseEther(ethToSplit.toString());
                 await splitter.splitPayment(addresses, { value });
 
-                await expect(splitter.splitPayment(addresses, { value })).to.changeEtherBalances(randomAccounts, Array(randomAccounts.length).fill(amountToAdd));
+                await expect(splitter.splitPayment(addresses, { value })).to.changeEtherBalances(randomAccounts, amountToAdd);
             });
 
             it("Should split payment evenly with surplus", async function () {
@@ -124,11 +131,11 @@ describe("PaymentSplitter", function () {
                 const remaining = await splitter.calculateRemaining(ethers.utils.parseEther(ethToSplit.toString()), accountToSplit, 14);
                 const randomAccounts = getMultipleRandom(accounts, accountToSplit);
                 const addresses = await Promise.all(randomAccounts.map(acc => acc.getAddress()));
-                const amountToAdd = ethers.utils.parseEther(ethToSplit.toString()).sub(remaining).div(accountToSplit);
+                const amountToAdd = fillArray(ethers.utils.parseEther(ethToSplit.toString()).sub(remaining).div(accountToSplit), accountToSplit);
 
                 const value = ethers.utils.parseEther(ethToSplit.toString());
 
-                await expect(splitter.splitPayment(addresses, { value })).to.changeEtherBalances(randomAccounts, Array(randomAccounts.length).fill(amountToAdd));
+                await expect(splitter.splitPayment(addresses, { value })).to.changeEtherBalances(randomAccounts, amountToAdd);
 
                 const surplus = await splitter.getSurplus();
                 expect(surplus).to.equal(remaining);
@@ -149,6 +156,54 @@ describe("PaymentSplitter", function () {
                 expect(surplus).to.equal(remaining);
 
                 await expect(splitter.withdrawSurplus()).to.changeEtherBalance(owner, remaining);
+            });
+        });
+
+        describe("Token Transactions", function () {
+            it("Should revert when tokens are not approved", async function () {
+                const tokensToSplit = 200;
+                const accountToSplit = 4;
+                const { splitter, accounts, token } = await loadFixture(deployPaymentSplitterFixture);
+                const randomAccounts = getMultipleRandom(accounts, accountToSplit);
+                const addresses = randomAccounts.map(acc => acc.address);
+
+                const decimals = await token.decimals();
+
+                const amount = ethers.utils.parseUnits(tokensToSplit.toString(), decimals);
+
+                await expect(splitter.splitTokenPayment(addresses, amount, token.address)).to.be.revertedWith("Insuficient Allowance");
+            });
+
+            it("Should withdraw token for payment", async function () {
+                const tokensToSplit = 200;
+                const accountToSplit = 4;
+                const { splitter, accounts, token, owner } = await loadFixture(deployPaymentSplitterFixture);
+                const randomAccounts = getMultipleRandom(accounts, accountToSplit);
+                const addresses = randomAccounts.map(acc => acc.address);
+
+                const decimals = await token.decimals();
+
+                const amount = ethers.utils.parseUnits(tokensToSplit.toString(), decimals);
+
+                await token.approve(splitter.address, amount);
+
+                await expect(splitter.splitTokenPayment(addresses, amount, token.address)).to.changeTokenBalance(token, owner, amount.mul(-1));
+            });
+
+            it("Should split payment evenly", async function () {
+                const tokensToSplit = 200;
+                const accountToSplit = 4;
+                const { splitter, accounts, token } = await loadFixture(deployPaymentSplitterFixture);
+                const randomAccounts = getMultipleRandom(accounts, accountToSplit);
+                const addresses = randomAccounts.map(acc => acc.address);
+                const decimals = await token.decimals();
+                const amountToAdd = fillArray(ethers.utils.parseUnits((tokensToSplit / accountToSplit).toString(), decimals).toString(), accountToSplit);
+
+                const amount = ethers.utils.parseUnits(tokensToSplit.toString(), decimals);
+
+                await token.approve(splitter.address, amount);
+
+                await expect(splitter.splitTokenPayment(addresses, amount, token.address)).to.changeTokenBalances(token, randomAccounts, amountToAdd);
             });
         });
     });
