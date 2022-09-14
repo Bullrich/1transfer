@@ -102,7 +102,7 @@ describe("PaymentSplitter", function () {
                 const accountToSplit = 4;
                 const { splitter, accounts, owner } = await loadFixture(deployPaymentSplitterFixture);
                 const randomAccounts = getMultipleRandom(accounts, accountToSplit);
-                const addresses = await Promise.all(randomAccounts.map(acc => acc.getAddress()));
+                const addresses = randomAccounts.map(acc => acc.address);
 
                 const value = ethers.utils.parseEther(ethToSplit.toString());
                 await splitter.splitPayment(addresses, { value });
@@ -115,7 +115,7 @@ describe("PaymentSplitter", function () {
                 const accountToSplit = 4;
                 const { splitter, accounts } = await loadFixture(deployPaymentSplitterFixture);
                 const randomAccounts = getMultipleRandom(accounts, accountToSplit);
-                const addresses = await Promise.all(randomAccounts.map(acc => acc.getAddress()));
+                const addresses = randomAccounts.map(acc => acc.address);
                 const amountToAdd = fillArray(ethers.utils.parseEther((ethToSplit / accountToSplit).toString()), accountToSplit);
 
                 const value = ethers.utils.parseEther(ethToSplit.toString());
@@ -130,7 +130,7 @@ describe("PaymentSplitter", function () {
                 const { splitter, accounts } = await loadFixture(deployPaymentSplitterFixture);
                 const remaining = await splitter.calculateRemaining(ethers.utils.parseEther(ethToSplit.toString()), accountToSplit, 14);
                 const randomAccounts = getMultipleRandom(accounts, accountToSplit);
-                const addresses = await Promise.all(randomAccounts.map(acc => acc.getAddress()));
+                const addresses = randomAccounts.map(acc => acc.address);
                 const amountToAdd = fillArray(ethers.utils.parseEther(ethToSplit.toString()).sub(remaining).div(accountToSplit), accountToSplit);
 
                 const value = ethers.utils.parseEther(ethToSplit.toString());
@@ -147,7 +147,7 @@ describe("PaymentSplitter", function () {
                 const { splitter, owner, accounts } = await loadFixture(deployPaymentSplitterFixture);
                 const remaining = await splitter.calculateRemaining(ethers.utils.parseEther(ethToSplit.toString()), accountToSplit, 14);
                 const randomAccounts = getMultipleRandom(accounts, accountToSplit);
-                const addresses = await Promise.all(randomAccounts.map(acc => acc.getAddress()));
+                const addresses = randomAccounts.map(acc => acc.address);
 
                 const value = ethers.utils.parseEther(ethToSplit.toString());
                 await splitter.splitPayment(addresses, { value });
@@ -156,6 +156,28 @@ describe("PaymentSplitter", function () {
                 expect(surplus).to.equal(remaining);
 
                 await expect(splitter.withdrawSurplus()).to.changeEtherBalance(owner, remaining);
+            });
+
+            it("Should revert if no surplus available", async function () {
+                const { splitter } = await loadFixture(deployPaymentSplitterFixture);
+
+                const surplus = await splitter.getSurplus();
+                expect(surplus).to.equal(0);
+
+                await expect(splitter.withdrawSurplus()).to.be.revertedWith("No surplus available");
+            });
+
+            it("Should revert if array is empty", async function () {
+                const { splitter, accounts } = await loadFixture(deployPaymentSplitterFixture);
+
+                await expect(splitter.splitPayment([])).to.be.revertedWith("Value can not be zero");
+            });
+
+            it("Should revert if no ether has been sent", async function () {
+                const { splitter, accounts } = await loadFixture(deployPaymentSplitterFixture);
+                const addresses = accounts.map(a => a.address);
+
+                await expect(splitter.splitPayment(addresses)).to.be.revertedWith("Divisible can not be less than divisor");
             });
         });
 
@@ -204,6 +226,79 @@ describe("PaymentSplitter", function () {
                 await token.approve(splitter.address, amount);
 
                 await expect(splitter.splitTokenPayment(addresses, amount, token.address)).to.changeTokenBalances(token, randomAccounts, amountToAdd);
+            });
+
+            it("Should split payment evenly with surplus", async function () {
+                const tokensToSplit = 200;
+                const accountToSplit = 4;
+                const { splitter, accounts, token } = await loadFixture(deployPaymentSplitterFixture);
+                const randomAccounts = getMultipleRandom(accounts, accountToSplit);
+                const addresses = randomAccounts.map(acc => acc.address);
+                const decimals = await token.decimals();
+                const remaining = await splitter.calculateRemaining(ethers.utils.parseUnits(tokensToSplit.toString(), decimals), accountToSplit, decimals - 2);
+
+                const amountToAdd = fillArray(ethers.utils.parseUnits((tokensToSplit).toString(), decimals).sub(remaining).div(accountToSplit), accountToSplit);
+
+                const amount = ethers.utils.parseUnits(tokensToSplit.toString(), decimals);
+
+                await token.approve(splitter.address, amount);
+
+                await expect(splitter.splitTokenPayment(addresses, amount, token.address)).to.changeTokenBalances(token, randomAccounts, amountToAdd);
+
+                const surplus = await splitter.getTokenSurplus(token.address);
+                expect(surplus).to.equal(remaining);
+            });
+
+            it("Should withdraw surplus", async function () {
+                const tokensToSplit = 200;
+                const accountToSplit = 7;
+                const { splitter, accounts, token, owner } = await loadFixture(deployPaymentSplitterFixture);
+                const decimals = await token.decimals();
+                const remaining = await splitter.calculateRemaining(ethers.utils.parseUnits(tokensToSplit.toString(), decimals), accountToSplit, decimals - 2);
+                const randomAccounts = getMultipleRandom(accounts, accountToSplit);
+                const addresses = randomAccounts.map(acc => acc.address);
+
+                const amount = ethers.utils.parseUnits(tokensToSplit.toString(), decimals);
+
+                await token.approve(splitter.address, amount);
+
+                await splitter.splitTokenPayment(addresses, amount, token.address);
+
+                const surplus = await splitter.getTokenSurplus(token.address);
+                expect(surplus).to.equal(remaining);
+
+                await expect(splitter.withdrawTokenSurplus(token.address)).to.changeTokenBalance(token, owner, remaining);
+            });
+
+            it("Should revert if no surplus available", async function () {
+                const { splitter, token } = await loadFixture(deployPaymentSplitterFixture);
+
+                const surplus = await splitter.getTokenSurplus(token.address);
+                expect(surplus).to.equal(0);
+
+                await expect(splitter.withdrawTokenSurplus(token.address)).to.be.revertedWith("No surplus available for the given token");
+            });
+
+            it("Should revert if array is empty", async function () {
+                const { splitter, token } = await loadFixture(deployPaymentSplitterFixture);
+
+                await token.approve(splitter.address, 10);
+                await expect(splitter.splitTokenPayment([], 10, token.address)).to.be.revertedWith("Value can not be zero");
+            });
+
+            it("Should revert if no amount has been set", async function () {
+                const { splitter, accounts, token } = await loadFixture(deployPaymentSplitterFixture);
+                const addresses = accounts.map(a => a.address);
+
+                await expect(splitter.splitTokenPayment(addresses, 0, token.address)).to.be.revertedWith("Divisible can not be less than divisor");
+            });
+
+            it("Should revert if approved amount is smaller than set amount", async function () {
+                const { splitter, accounts, token } = await loadFixture(deployPaymentSplitterFixture);
+                const addresses = accounts.map(a => a.address);
+                await token.approve(splitter.address, 10);
+
+                await expect(splitter.splitTokenPayment(addresses, 100, token.address)).to.be.revertedWith("Insuficient Allowance");
             });
         });
     });
