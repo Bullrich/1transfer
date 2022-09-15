@@ -1,5 +1,6 @@
 import { readable } from "svelte/store";
 import { getWithExpiry, setWithExpiry } from "../utils/storage";
+import downloadPrices from "../config/prices.json";
 
 const API_URL = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd";
 
@@ -27,9 +28,13 @@ export const price = readable<Map<CryptoSymbol, CurrencyType>>(undefined, (set) 
             set(cryptoArrayToMap(prices));
         }).catch(e => {
             console.error("Error fetching prices", e);
-            if (prices.data) {
-                console.warn("Using expired data as backup");
+            if (prices?.data) {
+                console.warn("Using expired data as backup", prices.data);
                 set(cryptoArrayToMap(prices.data));
+            } else {
+                console.warn("Using build prices as backup", downloadPrices);
+                const mappedData = cryptoArrayToMap(downloadPrices as CurrencyType[]);
+                set(mappedData);
             }
         })
     } else {

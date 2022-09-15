@@ -25,3 +25,6 @@ dist-ssr
 
 # Hardhat
 src/lib/contracts
+
+# Custom
+src/lib/config/prices.json

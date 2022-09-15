@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "postinstall": "npm --prefix contracts install",
-    "prebuild": "npm run --prefix contracts build"
+    "prebuild": "npm run downloadPrices && npm run --prefix contracts build",
+    "downloadPrices": "node scripts/downloadPrices.js"
   },
   "dependencies": {
     "ethers": "^5.7.0"
@@ -20,6 +21,7 @@
     "@tsconfig/svelte": "^3.0.0",
     "autoprefixer": "^10.4.8",
     "daisyui": "^2.24.0",
+    "node-fetch": "^3.2.10",
     "postcss": "^8.4.16",
     "svelte": "^3.49.0",
     "svelte-check": "^2.8.0",
