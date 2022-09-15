@@ -8,6 +8,7 @@ import { addressesLength, amount } from "./form";
 
 export const contract: Readable<PaymentSplitter> = derived([signer, chain], ([signer, chain]) => {
     const contractAddress = getContractAddress(chain);
+    console.assert(contractAddress, `No contract found for ${chain}`);
     if (contractAddress && signer) {
         console.log("got contract")
         return PaymentSplitter__factory.connect(contractAddress, signer);
@@ -18,10 +19,10 @@ export const splitPayment: Readable<string> = derived([contract, amount, address
     if (amnt > 0 && length > 0) {
         calculatePaymentSplit(cntrct, amnt, length).then(set);
     }
-})
+});
 
 export const remaining: Readable<string> = derived([contract, amount, addressesLength], ([cntrct, amnt, length], set) => {
     if (amnt > 0 && length > 0) {
         calculateRemaining(cntrct, amnt, length).then(set);
     }
-})
+});
