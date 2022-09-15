@@ -28,18 +28,3 @@ export const address: Readable<string> = derived(signer, (signer, set) => {
         signer.getAddress().then(address => set(address));
     }
 });
-
-
-function createWalletAuth() {
-    const { subscribe, set } = writable<string>();
-
-    return {
-        subscribe,
-        signIn: async () => {
-            const signer = await getSigner();
-            const address = await signer.getAddress();
-            set(address);
-        }
-    }
-}
-export const wallet = createWalletAuth();
