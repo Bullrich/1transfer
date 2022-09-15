@@ -1,13 +1,15 @@
 import { utils } from "ethers";
 import type { PaymentSplitter } from "../contracts";
 
+const ethDecimals = 18;
+
 export async function calculatePaymentSplit(contract: PaymentSplitter | undefined, amount: number, targets: number) {
-    const amountInEth = utils.parseUnits(amount.toString());
+    const amountInEth = utils.parseUnits(amount.toString(), ethDecimals);
     if (contract) {
-        const paymentCalculator = await contract.calculatePayment(amountInEth, targets);
+        const paymentCalculator = await contract.calculatePayment(amountInEth, targets, ethDecimals - 4);
         return utils.formatEther(paymentCalculator.toString());
     }
-    const parsedTarget = utils.parseUnits(`${targets}00000`, "gwei");
+    const parsedTarget = utils.parseUnits(targets.toString(), ethDecimals - 4);
     const remaining = amountInEth.mod(parsedTarget);
     const result = amountInEth.sub(remaining).div(targets);
     console.log(
@@ -17,12 +19,12 @@ export async function calculatePaymentSplit(contract: PaymentSplitter | undefine
 }
 
 export async function calculateRemaining(contract: PaymentSplitter | undefined, amount: number, targets: number) {
-    const amountInEth = utils.parseUnits(amount.toString());
+    const amountInEth = utils.parseUnits(amount.toString(), ethDecimals);
     if (contract) {
-        const paymentCalculator = await contract.calculateRemaining(amountInEth, targets);
+        const paymentCalculator = await contract.calculateRemaining(amountInEth, targets, ethDecimals - 4);
         return utils.formatEther(paymentCalculator.toString());
     }
-    const parsedTarget = utils.parseUnits(`${targets}00000`, "gwei");
+    const parsedTarget = utils.parseUnits(targets.toString(), ethDecimals - 4);
     const remaining = amountInEth.mod(parsedTarget);
     return utils.formatEther(remaining.toString());
 }

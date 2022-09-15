@@ -74,7 +74,8 @@ describe("PaymentSplitter", function () {
                 const multiplier = utils.parseUnits("10", "wei").pow(14);
                 const amountInEth = utils.parseUnits(amount.toString());
                 const expectedRemaining = amountInEth.mod(utils.parseUnits(divisor.toString(), "wei").mul(multiplier));
-                expect(await splitter.calculateRemaining(amountInEth, divisor, 14)).to.equal(expectedRemaining);
+                const contractRemaining = await splitter.calculateRemaining(amountInEth, divisor, 14);
+                expect(contractRemaining).to.equal(expectedRemaining);
             }
         });
 
@@ -90,7 +91,8 @@ describe("PaymentSplitter", function () {
                 const amountInEth = utils.parseUnits(amount.toString());
                 const remaining = amountInEth.mod(utils.parseUnits(divisor.toString(), "wei").mul(multiplier));
                 const expectedDivision = amountInEth.sub(remaining).div(divisor);
-                expect(await splitter.calculatePayment(amountInEth, divisor, 14)).to.equal(expectedDivision);
+                const contractRemaining = await splitter.calculatePayment(amountInEth, divisor, 14);
+                expect(contractRemaining).to.equal(expectedDivision);
             }
         });
     });
