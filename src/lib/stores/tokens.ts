@@ -8,7 +8,14 @@ import { chain } from "./chain";
 type CurrencyData = NativeCurrencyData | CurrencyMetadata;
 
 export const tokens: Readable<CurrencyData[]> = derived([chain], ([chain]) => {
+    if (!chain) {
+        console.warn("No chain selected");
+        return [];
+    }
     const nativeCurrency = getNativeCurrencyData(chain);
-    const tokens = getTokensFromNetwork(chain);
-    return [nativeCurrency, ...tokens];
+    const tokens = getTokensFromNetwork(chain) ?? [];
+    if (tokens && tokens.length > 0) {
+        return [nativeCurrency, ...tokens];
+    }
+    return [nativeCurrency];
 });

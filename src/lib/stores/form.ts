@@ -6,4 +6,4 @@ export const addressesLength = derived(addresses, $addresses => $addresses.filte
 
 export const amount = writable<number>();
 
-export const currency = writable<{ address?: string }>();
+export const currency = writable<{ address?: string }>({address:""});

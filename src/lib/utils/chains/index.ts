@@ -21,6 +21,8 @@ export function getNativeCurrencyData(chain: Chains) {
             return chainData.get(ChainsType.OPTIMISM_GOERLI).nativeCurrency;
         case ChainsType.OPTIMISM_KOVAN:
             return chainData.get(ChainsType.OPTIMISM_KOVAN).nativeCurrency;
+        default:
+            console.error("Chain not found", chain);
     }
 }
 
