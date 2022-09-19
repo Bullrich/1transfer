@@ -5,7 +5,7 @@ type AlertType = "alert-info" | "alert-success" | "alert-warning" | "alert-error
 export type ToastAlert = { message: string, alert?: AlertType };
 
 function createToast() {
-    const { subscribe, set, update } = writable<ToastAlert[]>([]);
+    const { subscribe, update } = writable<ToastAlert[]>([]);
 
     const push = (message: string, alert: AlertType = "alert-info") => {
         update(toasts => { toasts.push({ message, alert }); return toasts });
