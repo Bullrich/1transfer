@@ -1,4 +1,5 @@
 import { derived, writable } from "svelte/store";
+import type { CurrencyData } from "./tokens";
 
 export const addresses = writable<string[]>([""]);
 
@@ -6,4 +7,4 @@ export const addressesLength = derived(addresses, $addresses => $addresses.filte
 
 export const amount = writable<number>();
 
-export const currency = writable<{ address?: string }>({address:""});
+export const currency = writable<CurrencyData>({ name: "ETH", symbol: "eth", decimals: 18 });

@@ -20,11 +20,11 @@ export const balance: Readable<BigNumber> = derived([signer, chain, currency], (
     }
 });
 
-export const ethBalance = derived(balance, (balance) => {
+export const ethBalance = derived([balance, currency], ([balance, currency]) => {
     if (!balance) {
         return "";
     }
-    const stringBalance = utils.formatEther(balance);
+    const stringBalance = utils.formatUnits(balance, currency?.decimals ?? 18);
     if (stringBalance.includes(".")) {
         const [abs, decimals] = stringBalance.split(".");
         if (decimals.length > 4) {

@@ -4,13 +4,24 @@
     import ConfirmationModal from "./ConfirmationModal.svelte";
     import Cross from "./icons/Cross.svelte";
     import PriceStat from "./PriceStat.svelte";
-    import { contract, ethBalance, addresses, amount, tokens } from "../stores";
+    import {
+        contract,
+        ethBalance,
+        addresses,
+        amount,
+        tokens,
+        currency,
+    } from "../stores";
 
     $: disabled =
         !$contract ||
         !($amount > 0 && $addresses.filter((a) => a.length > 0).length > 1);
 
     $: setBalance = $amount;
+
+    const defaultToken = $tokens?.length > 0 ? $tokens[0].symbol : "eth";
+
+    $: selectedToken = defaultToken;
 
     $: btnMessage = !$contract
         ? "Network not supported"
@@ -63,6 +74,10 @@
         add.splice(index, 1);
         addresses.set(add);
     }
+
+    function changeCurrency() {
+        $currency = $tokens.find((t) => t.symbol === selectedToken);
+    }
 </script>
 
 <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
@@ -84,14 +99,16 @@
                 />
                 <select
                     class="flex-shrink-0 select select-primary py-1 px-2 rounded"
+                    bind:value={selectedToken}
+                    on:change={changeCurrency}
                 >
-                    {#each $tokens as token, index}
+                    {#each $tokens as token}
                         <option
-                            value={index}
+                            value={token.symbol}
                             disabled={$tokens.length < 2}
-                            selected={index == 0}
+                            selected={token.symbol === $currency.symbol}
                         >
-                            {token.symbol}
+                            {token.symbol.toUpperCase()}
                         </option>
                     {/each}
                 </select>

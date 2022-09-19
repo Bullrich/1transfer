@@ -5,7 +5,7 @@ import { getNativeCurrencyData } from "../utils/chains";
 import type { NativeCurrencyData } from "../utils/chains/types";
 import { chain } from "./chain";
 
-type CurrencyData = NativeCurrencyData | CurrencyMetadata;
+export type CurrencyData = NativeCurrencyData | CurrencyMetadata;
 
 export const tokens: Readable<CurrencyData[]> = derived([chain], ([chain]) => {
     if (!chain) {
