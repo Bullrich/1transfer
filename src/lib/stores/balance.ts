@@ -3,7 +3,7 @@ import { derived, type Readable } from "svelte/store";
 import { ERC20__factory } from "../contracts";
 import { chain } from "./chain";
 import { signer } from "./crypto";
-import { currency } from "./form"
+import { currency } from "./form";
 
 export const balance: Readable<BigNumber> = derived([signer, chain, currency], ([signer, chain, currency], set) => {
     if (signer && chain) {
