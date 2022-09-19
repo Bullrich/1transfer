@@ -93,7 +93,10 @@
             {#if $ethBalance}
                 <label class="label" for="amount">
                     <span class="label-text-alt">Balance {$ethBalance}</span>
-                    <span class="label-text-alt cursor-pointer" on:click={setMaxBalance}>
+                    <span
+                        class="label-text-alt cursor-pointer"
+                        on:click={setMaxBalance}
+                    >
                         Max
                     </span>
                 </label>
