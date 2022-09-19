@@ -27,8 +27,23 @@ export const changeNetwork = async (chainId: number): Promise<void> => {
             params: [{ chainId: utils.hexValue(chainId) }],
         }).then(() => res())
             .catch(err => {
-                console.warn("Could not connect to chain", chainId);
-                return rej(err);
+                // This error code indicates that the chain has not been added to MetaMask
+                if (err.code !== 4902) {
+                    console.warn("Could not connect to chain", chainId);
+                    return rej(err);
+                }
+                const parameters = getChain(chainId);
+                if (!parameters) {
+                    return rej(`chainId ${chainId} is not in the list of chainData`);
+                }
+                window.ethereum.request({
+                    method: 'wallet_addEthereumChain',
+                    params: [parameters]
+                }).then(() => res())
+                    .catch(e => {
+                        console.error("Problem installing chain", chainId);
+                        rej(e)
+                    });
             });
     });
 }
