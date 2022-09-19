@@ -1,12 +1,10 @@
 <script lang="ts">
     import { fly } from "svelte/transition";
-    import { ethBalance } from "../stores/balance";
-    import { contract } from "../stores/contract";
-    import { addresses, amount } from "../stores/form";
     import { insertInArray } from "../utils/arrayHelper";
     import ConfirmationModal from "./ConfirmationModal.svelte";
     import Cross from "./icons/Cross.svelte";
     import PriceStat from "./PriceStat.svelte";
+    import { contract, ethBalance, addresses, amount, tokens } from "../stores";
 
     $: disabled =
         !$contract ||
@@ -87,7 +85,15 @@
                 <select
                     class="flex-shrink-0 select select-primary py-1 px-2 rounded"
                 >
-                    <option disabled selected value={-1}>ETH</option>
+                    {#each $tokens as token, index}
+                        <option
+                            value={index}
+                            disabled={$tokens.length < 2}
+                            selected={index == 0}
+                        >
+                            {token.symbol}
+                        </option>
+                    {/each}
                 </select>
             </div>
             {#if $ethBalance}
