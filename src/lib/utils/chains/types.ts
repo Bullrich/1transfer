@@ -9,10 +9,12 @@ export enum Chains {
     OPTIMISM_GOERLI = 420
 }
 
+interface NativeCurrencyData { name: string; decimals: number, symbol: string }
+
 export interface ChainData {
     chainName: string;
     chainId: string;
-    nativeCurrency: { name: string; decimals: number, symbol: string };
+    nativeCurrency: NativeCurrencyData;
     rpcUrls: string[];
     blockExplorerUrls?: string[];
 }

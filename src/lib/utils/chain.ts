@@ -1,6 +1,5 @@
 import { utils } from "ethers";
-import { getChain } from "./chains";
-import { Chains } from "./chains/chain";
+import { Chains, getChain } from "./chains";
 
 export const getChainCollection = (): { name: string; id: Chains }[] => {
     const collection: { name: string; id: Chains }[] = [];

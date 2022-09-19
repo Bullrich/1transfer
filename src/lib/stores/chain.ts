@@ -1,7 +1,7 @@
 import { derived, type Readable } from "svelte/store";
 import { getContractAddress } from "../config/contracts";
 import { changeNetwork } from "../utils/chain";
-import type { Chains } from "../utils/chains/chain";
+import type { Chains } from "../utils/chains";
 import { signer } from "./crypto";
 
 function createChainStore() {

@@ -1,4 +1,4 @@
-import { Chains } from "../utils/chains/chain";
+import { Chains } from "../utils/chains";
 
 const OPTIMISM_KOVAN = "0xfd82641C1B3355d283cd03C8ef1DcD87ACBeFBA2";
 const OPTIMISM_GOERLI = "0xe7ac80f3E0630757a580CE10EC3a9BbF2727B882";
