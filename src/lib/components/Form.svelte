@@ -73,20 +73,27 @@
             <label class="label" for="amount">
                 <span class="label-text">Amount</span>
             </label>
-            <input
-                type="number"
-                on:input|preventDefault={handleNumber}
-                placeholder="0"
-                bind:value={setBalance}
-                min="0.00002"
-                id="amount"
-                required
-                class="input input-bordered"
-            />
+            <div class="flex items-center border-b border-teal-500 py-2">
+                <input
+                    type="number"
+                    on:input|preventDefault={handleNumber}
+                    placeholder="0"
+                    bind:value={setBalance}
+                    min="0.00002"
+                    id="amount"
+                    required
+                    class="input input-bordered w-full focus:outline-none"
+                />
+                <select
+                    class="flex-shrink-0 select select-primary py-1 px-2 rounded"
+                >
+                    <option disabled selected value={-1}>ETH</option>
+                </select>
+            </div>
             {#if $ethBalance}
                 <label class="label" for="amount">
                     <span class="label-text-alt">Balance {$ethBalance}</span>
-                    <span class="label-text-alt" on:click={setMaxBalance}>
+                    <span class="label-text-alt cursor-pointer" on:click={setMaxBalance}>
                         Max
                     </span>
                 </label>
@@ -131,3 +138,13 @@
         </div>
     </div>
 </div>
+
+<style>
+    select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        padding: 2px 30px 2px 2px;
+        border: none;
+    }
+</style>
