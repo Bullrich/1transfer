@@ -1,14 +1,23 @@
 <script lang="ts">
-    import { utils } from "ethers";
+    import { utils, type ContractTransaction } from "ethers";
     import { SpinLine } from "svelte-loading-spinners";
-    import { chain } from "../stores/chain";
-    import { contract } from "../stores/contract";
-    import { toast } from "../stores/toast";
+    import type { CurrencyMetadata } from "../config/currencies/types";
+    import { ERC20__factory } from "../contracts";
+    import {
+        address,
+        chain,
+        contract,
+        currency,
+        signer,
+        toast
+    } from "../stores";
     import { getTxAddress } from "../utils/chain";
     import RounderCross from "./icons/RounderCross.svelte";
 
     export let totalAmount: number;
     export let addresses: string[];
+
+    $: needsToApproveTokens = $currency.isToken;
 
     let executionPromise: Promise<string>;
 
@@ -18,11 +27,59 @@
         executionPromise = executeSplitPayment();
     }
 
+    async function approveToken(): Promise<boolean> {
+        if ($currency.isToken) {
+            const token: CurrencyMetadata = $currency as CurrencyMetadata;
+            const tokenContract = ERC20__factory.connect(
+                token.address,
+                $signer
+            );
+            const approvenTokens = await tokenContract.allowance(
+                $address,
+                $contract.address
+            );
+
+            const tokenUnits = utils.parseUnits(
+                totalAmount.toString(),
+                token.decimals
+            );
+            console.log(
+                "tokens",
+                approvenTokens.toString(),
+                "required",
+                tokenUnits.toString()
+            );
+            if (approvenTokens.lt(tokenUnits)) {
+                const tx = await tokenContract.approve(
+                    $contract.address,
+                    tokenUnits
+                );
+                await tx.wait();
+            }
+            needsToApproveTokens = false;
+            return true;
+        }
+    }
+
     async function executeSplitPayment(): Promise<string> {
         btnMessage = "Waiting for user approval";
-        const tx = await $contract.splitPayment(addresses, {
-            value: utils.parseEther(totalAmount.toString()),
-        });
+        let tx: ContractTransaction;
+        if ($currency.isToken) {
+            const token: CurrencyMetadata = $currency as CurrencyMetadata;
+            const tokenUnits = utils.parseUnits(
+                totalAmount.toString(),
+                token.decimals
+            );
+            tx = await $contract.splitTokenPayment(
+                addresses,
+                tokenUnits,
+                token.address
+            );
+        } else {
+            tx = await $contract.splitPayment(addresses, {
+                value: utils.parseEther(totalAmount.toString()),
+            });
+        }
         btnMessage = "Waiting for transaction to finish";
         await tx.wait();
 
@@ -33,13 +90,23 @@
 </script>
 
 {#if !executionPromise}
-    <button
-        class="btn btn-success w-half"
-        disabled={!$contract}
-        on:click={startPayment}
-    >
-        {btnMessage}
-    </button>
+    {#if needsToApproveTokens}
+        <button
+            class="btn btn-success w-half"
+            disabled={!$contract}
+            on:click={approveToken}
+        >
+            Allow the 1Transfer protocol to use your {$currency.symbol.toUpperCase()}
+        </button>
+    {:else}
+        <button
+            class="btn btn-success w-half"
+            disabled={!$contract}
+            on:click={startPayment}
+        >
+            {btnMessage}
+        </button>
+    {/if}
 {:else}
     {#await executionPromise}
         <SpinLine size="60" color="#FF3E00" unit="px" />
