@@ -10,6 +10,7 @@ export function getNativeCurrencyData(chain: Chains) {
         case ChainsType.MAINNET:
         case ChainsType.RINKEBY:
         case ChainsType.ROPSTEN:
+        case ChainsType.GOERLI:
             return { name: 'ETH', decimals: 18, symbol: 'ETH' };
         case ChainsType.MUMBAI:
             return chainData.get(ChainsType.MUMBAI).nativeCurrency;

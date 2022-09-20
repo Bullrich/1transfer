@@ -2,6 +2,7 @@ export enum Chains {
     MAINNET = 1,
     RINKEBY = 4,
     ROPSTEN = 3,
+    GOERLI = 5,
     POLYGON = 137,
     MUMBAI = 80001,
     OPTIMISM = 10,
