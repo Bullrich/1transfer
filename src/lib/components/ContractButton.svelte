@@ -9,19 +9,27 @@
         contract,
         currency,
         signer,
-        toast
+        toast,
     } from "../stores";
     import { getTxAddress } from "../utils/chain";
     import RounderCross from "./icons/RounderCross.svelte";
 
+    enum TokenAllowanceState {
+        NotAproved,
+        Waiting,
+        Approved,
+    }
+
     export let totalAmount: number;
     export let addresses: string[];
 
-    $: needsToApproveTokens = $currency.isToken;
+    $: needsToApproveTokens = $currency.isToken
+        ? TokenAllowanceState.NotAproved
+        : TokenAllowanceState.Approved;
 
     let executionPromise: Promise<string>;
 
-    let btnMessage = "Approve operation";
+    let btnMessage = "Transfer";
 
     function startPayment() {
         executionPromise = executeSplitPayment();
@@ -29,6 +37,7 @@
 
     async function approveToken(): Promise<boolean> {
         if ($currency.isToken) {
+            needsToApproveTokens = TokenAllowanceState.Waiting;
             const token: CurrencyMetadata = $currency as CurrencyMetadata;
             const tokenContract = ERC20__factory.connect(
                 token.address,
@@ -43,12 +52,6 @@
                 totalAmount.toString(),
                 token.decimals
             );
-            console.log(
-                "tokens",
-                approvenTokens.toString(),
-                "required",
-                tokenUnits.toString()
-            );
             if (approvenTokens.lt(tokenUnits)) {
                 const tx = await tokenContract.approve(
                     $contract.address,
@@ -56,7 +59,7 @@
                 );
                 await tx.wait();
             }
-            needsToApproveTokens = false;
+            needsToApproveTokens = TokenAllowanceState.Approved;
             return true;
         }
     }
@@ -90,13 +93,18 @@
 </script>
 
 {#if !executionPromise}
-    {#if needsToApproveTokens}
+    {#if needsToApproveTokens !== TokenAllowanceState.Approved}
         <button
             class="btn btn-success w-half"
-            disabled={!$contract}
+            disabled={!$contract ||
+                needsToApproveTokens !== TokenAllowanceState.NotAproved}
             on:click={approveToken}
         >
-            Allow the 1Transfer protocol to use your {$currency.symbol.toUpperCase()}
+            {#if needsToApproveTokens === TokenAllowanceState.NotAproved}
+                Allow the 1Transfer protocol to use your {$currency.symbol.toUpperCase()}
+            {:else}
+                Waiting for token approval
+            {/if}
         </button>
     {:else}
         <button
