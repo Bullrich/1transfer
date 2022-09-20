@@ -1,30 +1,48 @@
-import { utils } from "ethers";
+import { BigNumber, utils } from "ethers";
 import type { PaymentSplitter } from "../contracts";
+import type { CurrencyData } from "../stores";
 
-const ETH_DECIMALS = 18;
 
-export async function calculatePaymentSplit(contract: PaymentSplitter | undefined, amount: number, targets: number, decimals:number = ETH_DECIMALS) {
-    const amountInEth = utils.parseUnits(amount.toString(), decimals);
-    if (contract) {
-        const paymentCalculator = await contract.calculatePayment(amountInEth, targets, decimals);
-        return utils.formatEther(paymentCalculator.toString());
+export class PaymentCalculator {
+    private readonly amount: BigNumber;
+    private readonly decimalsToSplit: number;
+
+    constructor(
+        amount: number,
+        private readonly targets: number,
+        private readonly currency: CurrencyData,
+        private readonly contract?: PaymentSplitter,) {
+        this.amount = utils.parseUnits(amount.toString(), currency.decimals);
+        if (currency.decimals <= 4) {
+            this.decimalsToSplit = currency.decimals;
+        } else {
+            this.decimalsToSplit = currency.isToken ? currency.decimals - 3 : currency.decimals - 4;
+        }
     }
-    const parsedTarget = utils.parseUnits(targets.toString(), decimals);
-    const remaining = amountInEth.mod(parsedTarget);
-    const result = amountInEth.sub(remaining).div(targets);
-    console.log(
-        `Total: ${amountInEth} % ${parsedTarget} = ${remaining.toString()}`
-    );
-    return utils.formatEther(result.toString());
-}
 
-export async function calculateRemaining(contract: PaymentSplitter | undefined, amount: number, targets: number, decimals: number = ETH_DECIMALS) {
-    const amountInEth = utils.parseUnits(amount.toString(), decimals);
-    if (contract) {
-        const paymentCalculator = await contract.calculateRemaining(amountInEth, targets, decimals);
-        return utils.formatEther(paymentCalculator.toString());
+    public async calculatePaymentSplit() {
+        const parsedTarget = utils.parseUnits(this.targets.toString(), this.decimalsToSplit);
+        const remaining = this.amount.mod(parsedTarget);
+        const result = this.amount.sub(remaining).div(this.targets);
+        console.log(
+            `Total: ${this.amount} % ${parsedTarget} = ${remaining.toString()}`
+        );
+        return utils.formatUnits(result.toString(), this.currency.decimals);
     }
-    const parsedTarget = utils.parseUnits(targets.toString(), decimals);
-    const remaining = amountInEth.mod(parsedTarget);
-    return utils.formatEther(remaining.toString());
+
+    public async calculatePaymentSplitInContract() {
+        const paymentCalculator = await this.contract.calculatePayment(this.amount, this.targets, this.decimalsToSplit);
+        return utils.formatUnits(paymentCalculator.toString(), this.currency.decimals);
+    }
+
+    public async calculateRemaining() {
+        const parsedTarget = utils.parseUnits(this.targets.toString(), this.decimalsToSplit);
+        const remaining = this.amount.mod(parsedTarget);
+        return utils.formatUnits(remaining.toString(), this.currency.decimals);
+    }
+
+    public async calculateRemainingInContract() {
+        const paymentCalculator = await this.contract.calculateRemaining(this.amount, this.targets, this.decimalsToSplit);
+        return utils.formatUnits(paymentCalculator.toString(), this.currency.decimals);
+    }
 }
