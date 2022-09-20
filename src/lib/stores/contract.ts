@@ -4,7 +4,7 @@ import { PaymentSplitter__factory, type PaymentSplitter } from "../contracts";
 import { calculatePaymentSplit, calculateRemaining } from "../utils/priceCalculator";
 import { chain } from "./chain";
 import { signer } from "./crypto";
-import { addressesLength, amount } from "./form";
+import { addressesLength, amount, currency } from "./form";
 
 export const contract: Readable<PaymentSplitter> = derived([signer, chain], ([signer, chain]) => {
     const contractAddress = getContractAddress(chain);
@@ -15,14 +15,16 @@ export const contract: Readable<PaymentSplitter> = derived([signer, chain], ([si
     }
 });
 
-export const splitPayment: Readable<string> = derived([contract, amount, addressesLength], ([cntrct, amnt, length], set) => {
+export const splitPayment: Readable<string> = derived([contract, amount, addressesLength, currency], ([cntrct, amnt, length, currency], set) => {
     if (amnt > 0 && length > 0) {
-        calculatePaymentSplit(cntrct, amnt, length).then(set);
+        const decimals = currency.address ? currency.decimals - 2 : currency.decimals - 4;
+        calculatePaymentSplit(cntrct, amnt, length, decimals).then(set);
     }
 });
 
-export const remaining: Readable<string> = derived([contract, amount, addressesLength], ([cntrct, amnt, length], set) => {
+export const remaining: Readable<string> = derived([contract, amount, addressesLength, currency], ([cntrct, amnt, length, currency], set) => {
     if (amnt > 0 && length > 0) {
-        calculateRemaining(cntrct, amnt, length).then(set);
+        const decimals = currency.address ? currency.decimals - 2 : currency.decimals - 4;
+        calculateRemaining(cntrct, amnt, length, decimals).then(set);
     }
 });

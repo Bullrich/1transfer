@@ -1,7 +1,5 @@
 <script lang="ts">
-    import { remaining, splitPayment } from "../stores/contract";
-    import { addresses, amount } from "../stores/form";
-    import { price } from "../stores/price";
+    import { remaining, splitPayment, addresses, amount, price, currency as currencyStore } from "../stores";
     import ContractButton from "./ContractButton.svelte";
     import Price from "./Price.svelte";
 
@@ -9,7 +7,7 @@
 
     $: fee = Number($remaining) > 0;
 
-    $: currency = $price?.get("eth");
+    $: currency = $currencyStore ? $price?.get($currencyStore.symbol) : $price?.get("eth");
 </script>
 
 <input type="checkbox" id="confirmation-modal" class="modal-toggle" />

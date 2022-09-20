@@ -1,6 +1,7 @@
 import { readable } from "svelte/store";
 import { getWithExpiry, setWithExpiry } from "../utils/storage";
 import downloadPrices from "../config/prices.json";
+import type { CryptoSymbol } from "../utils/chains/types";
 
 const API_URL = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd";
 
@@ -41,8 +42,6 @@ export const price = readable<Map<CryptoSymbol, CurrencyType>>(undefined, (set) 
         set(cryptoArrayToMap(prices.data));
     }
 });
-
-export type CryptoSymbol = "eth" | "usdt" | "usdc";
 
 export interface CurrencyType {
     id: string;

@@ -7,4 +7,4 @@ export const addressesLength = derived(addresses, $addresses => $addresses.filte
 
 export const amount = writable<number>();
 
-export const currency = writable<CurrencyData>({ name: "ETH", symbol: "eth", decimals: 18 });
+export const currency = writable<CurrencyData>({ name: "eth", symbol: "eth", decimals: 18 });

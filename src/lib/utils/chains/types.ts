@@ -9,7 +9,9 @@ export enum Chains {
     OPTIMISM_GOERLI = 420
 }
 
-export interface NativeCurrencyData { name: string; decimals: number, symbol: string }
+export type CryptoSymbol = "eth" | "usdt" | "usdc";
+
+export interface NativeCurrencyData { name: string; decimals: number, symbol: CryptoSymbol }
 
 export interface ChainData {
     chainName: string;
