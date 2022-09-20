@@ -1,9 +1,11 @@
 import { chainData } from "../../config/chains";
-import { Chains, Chains as ChainsType, type ChainData } from "./types";
+import { Chains, Chains as ChainsType, type ChainData, type NativeCurrencyData } from "./types";
 
 export function getChain(chain: Chains): ChainData {
     return chainData.get(chain);
 }
+
+export const defaultNative: NativeCurrencyData = { name: 'ETH', decimals: 18, symbol: 'eth' };
 
 export function getNativeCurrencyData(chain: Chains) {
     switch (chain) {
@@ -11,7 +13,7 @@ export function getNativeCurrencyData(chain: Chains) {
         case ChainsType.RINKEBY:
         case ChainsType.ROPSTEN:
         case ChainsType.GOERLI:
-            return { name: 'ETH', decimals: 18, symbol: 'ETH' };
+            return defaultNative;
         case ChainsType.MUMBAI:
             return chainData.get(ChainsType.MUMBAI).nativeCurrency;
         case ChainsType.POLYGON:
