@@ -8,6 +8,7 @@
     $: fee = Number($remaining) > 0;
 
     $: currency = $currencyStore ? $price?.get($currencyStore.symbol) : $price?.get("eth");
+    $: currencySymbol = currency.symbol.toUpperCase();
 </script>
 
 <input type="checkbox" id="confirmation-modal" class="modal-toggle" />
@@ -21,10 +22,10 @@
         </label>
         <h3 class="font-bold text-lg">Confirm operation</h3>
         <p class="py-4">
-            The following operation will split an amount of {$amount} ETH into {parsedAddresses.length}
+            The following operation will split an amount of {$amount} {currencySymbol} into {parsedAddresses.length}
             accounts.
         </p>
-        <p class="py-4">Each account will receive {$splitPayment} ETH</p>
+        <p class="py-4">Each account will receive {$splitPayment} {currencySymbol}</p>
         {#if fee}
             <p class="py-4">
                 A remaining fee of
