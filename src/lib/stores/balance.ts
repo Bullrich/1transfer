@@ -8,10 +8,10 @@ import { currency } from "./form";
 export const balance: Readable<BigNumber> = derived([signer, chain, currency], ([signer, chain, currency], set) => {
     if (signer && chain) {
         // if not token address is assigned use the default balance
-        if (!currency?.address) {
+        if (!currency?.isToken) {
             signer.getBalance().then(set);
         }
-        else if (currency?.address) {
+        else if (currency?.isToken) {
             // if there is a token address let's get the address of the wallet and then the balance for that token
             signer.getAddress().then(address => {
                 ERC20__factory.connect(currency.address, signer).balanceOf(address).then(set);

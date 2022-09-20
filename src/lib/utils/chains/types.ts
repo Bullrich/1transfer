@@ -11,7 +11,7 @@ export enum Chains {
 
 export type CryptoSymbol = "eth" | "usdt" | "usdc";
 
-export interface NativeCurrencyData { name: string; decimals: number, symbol: CryptoSymbol }
+export interface NativeCurrencyData { name: string; decimals: number, symbol: CryptoSymbol, isToken?: boolean }
 
 export interface ChainData {
     chainName: string;

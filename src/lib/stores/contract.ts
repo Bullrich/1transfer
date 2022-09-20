@@ -17,14 +17,14 @@ export const contract: Readable<PaymentSplitter> = derived([signer, chain], ([si
 
 export const splitPayment: Readable<string> = derived([contract, amount, addressesLength, currency], ([cntrct, amnt, length, currency], set) => {
     if (amnt > 0 && length > 0) {
-        const decimals = currency.address ? currency.decimals - 2 : currency.decimals - 4;
+        const decimals = currency.isToken ? currency.decimals - 2 : currency.decimals - 4;
         calculatePaymentSplit(cntrct, amnt, length, decimals).then(set);
     }
 });
 
 export const remaining: Readable<string> = derived([contract, amount, addressesLength, currency], ([cntrct, amnt, length, currency], set) => {
     if (amnt > 0 && length > 0) {
-        const decimals = currency.address ? currency.decimals - 2 : currency.decimals - 4;
+        const decimals = currency.isToken ? currency.decimals - 2 : currency.decimals - 4;
         calculateRemaining(cntrct, amnt, length, decimals).then(set);
     }
 });
