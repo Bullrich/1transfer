@@ -14,10 +14,26 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  deploy-to-github-pages:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build-landing:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: landing
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - run: npm install
+      - run: npm run build
+      - uses: actions/upload-artifact@master
+        with:
+          name: landing
+          path: ./landing/public
+          if-no-files-found: error
+  build-app:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -29,8 +45,34 @@ jobs:
       - run: npm install
       - name: Test contract
         run: npm run --prefix contracts test
-      - name: Build
-        run: npm run build
+      - run: npm run build
+      - uses: actions/upload-artifact@master
+        with:
+          if-no-files-found: error
+          name: app
+          path: ./dist
+      - name: Delete build
+        run: rm -rf dist
+
+  deploy-to-github-pages:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: [build-landing, build-app]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Download landing page
+        uses: actions/download-artifact@master
+        with:
+          name: landing
+          path: ./dist
+      - name: Download app
+        uses: actions/download-artifact@master
+        with:
+          name: app
+          path: ./dist/app
       - name: Setup Pages
         uses: actions/configure-pages@v2
       - name: Upload artifact
@@ -42,17 +84,19 @@ jobs:
         uses: actions/deploy-pages@v1
   deploy-to-firebase:
     runs-on: ubuntu-latest
+    needs: [build-landing, build-app]
     steps:
       - uses: actions/checkout@v2
-      - name: Install node
-        uses: actions/setup-node@v2
+      - name: Download landing page
+        uses: actions/download-artifact@master
         with:
-          node-version: 16
-      - run: npm install
-      - name: Test contract
-        run: npm run --prefix contracts test
-      - name: Build
-        run: npm run build
+          name: landing
+          path: ./dist
+      - name: Download app
+        uses: actions/download-artifact@master
+        with:
+          name: app
+          path: ./dist/app
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
