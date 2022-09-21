@@ -1,5 +1,10 @@
 @tailwind base;
 @tailwind components;
+
+.chain-card {
+  @apply w-52 h-52 shadow-md rounded-md mx-auto flex transition ease-in-out delay-150 hover:scale-110 duration-300;
+}
+
 @tailwind utilities;
 
 :root {
@@ -16,4 +21,17 @@ a {
 }
 a:hover {
   @apply text-[#535bf2];
+}
+
+
+.logo {
+  max-height: 70%;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.chain-container {
+  width: 70%;
 }

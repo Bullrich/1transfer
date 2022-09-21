@@ -3,31 +3,220 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <link rel="icon" type="image/svg+xml" href="/logo.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="/style.css" />
-  <title>Vite App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1Transfer | Send crypto to many addresses in 1 transfer.</title>
+  <meta name="description" content="Send crypto to multiple addresses with one transaction.">
+
+  <meta property="og:url" content="https://1transfer.org/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="1Transfer">
+  <meta property="og:description" content="Send crypto to multiple addresses with one transaction.">
+
+  <meta property="twitter:domain" content="1transfer.org">
+  <meta property="twitter:url" content="https://1transfer.org/">
+  <meta name="twitter:title" content="1Transfer">
+  <meta name="twitter:description" content="Send crypto to multiple addresses with one transaction.">
 </head>
 
-<body
-  class="min-w-[320px] font-inter text-[#213547] text-base font-normal bg-[#ffffff] dark:bg-[#242424] dark:text-transparent-white m-0 flex place-items-center min-h-screen">
-  <div class="flex flex-col justify-center items-center p-8 max-w-[1280px] mx-auto">
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="will-change-[filter] p-5 h-24 hover:drop-shadow-logo" alt="Vite logo" />
-    </a>
-    <a href="https://tailwindcss.com/" target="_blank">
-      <img src="/tailwindcss.svg" class="will-change-[filter] p-5 h-18 hover:drop-shadow-logo-tw w-auto"
-        alt="TailwindCSS logo" />
-    </a>
-    <h1 class="text-6xl my-12 bg-gradient-to-r from-green-400 to-blue-500 p-4 bg-clip-text text-transparent">
-      Hello Vite!</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
+<body class="min-w-[320px] font-inter text-[#213547] text-base font-normal">
+  <div class="navbar bg-base-100">
+    <div class="flex-1">
+      <a class="btn btn-ghost normal-case text-xl"><img class="logo" src="/logo.svg" alt="logo" />1 TRANSFER</a>
     </div>
-    <p class="text-gray-600">
-      Click on the Vite logo to learn more
-    </p>
+    <div class="flex-none">
+      <ul class="menu menu-horizontal p-0">
+        <li><a href="#works">How it works</a></li>
+        <li><a href="#chains">Supported chains</a></li>
+        <li><a href="https://github.com/Bullrich/1transfer" target="_blank">GitHub</a></li>
+        <li><a class="btn btn-primary text-p text-primary-content" href="./app" target="_blank">Launch app</a></li>
+      </ul>
+    </div>
   </div>
+  <div class="hero min-h-screen bg-base-200">
+    <div class="hero-content flex-col lg:flex-row">
+
+      <img src="/logo-animated.svg" alt="logo" class="max-w-sm rounded-lg" />
+      <div class="text-base-content">
+        <h1 class="text-5xl font-bold">1 TRANSFER</h1>
+        <p class="py-6"> Send crypto to multiple accounts in a single transfer. Supports multiple chains and multiple
+          tokens.
+          It can also be integrated in your own smart contract.
+        </p>
+        <a class="btn btn-primary text-primary-content" href="./app" target="_blank">Launch app</a>
+        <a class="btn btn-secondary text-secondary-content mt-3" href="#works">Find out how it works</a>
+      </div>
+    </div>
+  </div>
+  <!-- How it works section -->
+  <div class="hero min-h-screen bg-base-400" id="works">
+    <div class="hero-content text-center">
+      <div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-32">
+
+
+          <div class="card w-96 bg-base-100 shadow-xl max-w-full">
+            <figure class="px-10 pt-10">
+              <img src="/works/crypto.svg" alt="Shoes" class="rounded-xl" />
+            </figure>
+            <div class="card-body items-center text-center">
+              <h2 class="card-title">Select an amount</h2>
+              <p>Pick the amount and currency that you want to send</p>
+            </div>
+          </div>
+
+          <div class="card w-96 bg-base-100 shadow-xl max-w-full">
+            <figure class="px-10 pt-10">
+              <img src="/works/connected.svg" alt="Shoes" class="rounded-xl" />
+            </figure>
+            <div class="card-body items-center text-center">
+              <h2 class="card-title">Set all the destinataries</h2>
+              <p>Add all the addresses that you want to transfer to</p>
+            </div>
+          </div>
+
+
+
+          <div class="card w-96 bg-base-100 shadow-xl max-w-full">
+            <figure class="px-10 pt-10">
+              <img src="/works/pig.svg" alt="Shoes" class="rounded-xl" />
+            </figure>
+            <div class="card-body items-center text-center">
+              <h2 class="card-title">Execute smart contract</h2>
+              <p>The contract will divide the payment equally and transfer to all the payees</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Supported chains section -->
+  <div class="hero min-h-screen bg-base-300" id="chains">
+    <div class="hero-content text-center">
+      <div>
+        <h2 class="text-5xl font-bold">Supported chains</h2>
+        <div class="grid grid-cols-3 gap-32 mt-8">
+          <div>
+            <div class="chain-card bg-base-300 hover:bg-base-200">
+              <div class="chain-container p-4 m-auto">
+                <img src="/chains/ethereum.svg" />
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="chain-card bg-base-300 hover:bg-base-200">
+              <div class="chain-container p-4 m-auto">
+                <img src="/chains/optimism.png" />
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="chain-card bg-base-300 hover:bg-base-200">
+              <div class="chain-container p-4 m-auto">
+                <img src="/chains/polygon.svg" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Integrate section -->
+  <div class="hero min-h-screen bg-base-200" id="chains">
+    <div class="hero-content flex-col lg:flex-row">
+      <div>
+
+        <div class="text-base-content">
+          <h1 class="text-5xl font-bold">Integrate it into your own contract</h1>
+          <p class="pt-4"> Easily implement it in your own smart contract to automatically distribute payment of
+            currencies.</p>
+          <p class="pb-6">
+            The system supports any ERC-20 standard token.
+            Find more about it in the <a class="link link-primary" href="#">documentation</a>.
+          </p>
+        </div>
+        <div class="mockup-code text-left max-w-full">
+          <pre class="mx-8">
+            <code>
+interface I1Transfer {
+  function splitPayment(address[] memory recipients) 
+    external payable;
+            
+  function splitTokenPayment(
+    address[] memory recipients,
+    uint256 amount,
+    address token
+    ) external;
+}
+            </code>
+          </pre>
+        </div>
+      </div>
+      <img src="/works/ether.svg" alt="logo" class="max-w-sm rounded-lg" />
+    </div>
+  </div>
+
+
+  <!-- Use case section >
+  <div class="hero min-h-screen bg-base-400" id="works">
+    <div class="hero-content text-center">
+      <div>
+        <h1 class="text-5xl font-bold">Use cases</h1>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-32">
+
+
+          <div class="card w-96 bg-base-100 shadow-xl max-w-full">
+            <figure class="px-10 pt-10">
+              <img src="/works/crypto.svg" alt="Shoes" class="rounded-xl" />
+            </figure>
+            <div class="card-body items-center text-center">
+              <h2 class="card-title">Select an amount</h2>
+              <p>Pick the amount and currency that you want to send</p>
+            </div>
+          </div>
+
+          <div class="card w-96 bg-base-100 shadow-xl max-w-full">
+            <figure class="px-10 pt-10">
+              <img src="/works/connected.svg" alt="Shoes" class="rounded-xl" />
+            </figure>
+            <div class="card-body items-center text-center">
+              <h2 class="card-title">Set all the destinataries</h2>
+              <p>Add all the addresses that you want to transfer to</p>
+            </div>
+          </div>
+
+
+
+          <div class="card w-96 bg-base-100 shadow-xl max-w-full">
+            <figure class="px-10 pt-10">
+              <img src="/works/pig.svg" alt="Shoes" class="rounded-xl" />
+            </figure>
+            <div class="card-body items-center text-center">
+              <h2 class="card-title">Execute smart contract</h2>
+              <p>The contract will divide the payment equally and transfer to all the payees</p>
+            </div>
+          </div>
+
+
+
+          <div class="card w-96 bg-base-100 shadow-xl">
+            <figure class="px-10 pt-10">
+              <img src="/works/pig.svg" alt="Shoes" class="rounded-xl" />
+            </figure>
+            <div class="card-body items-center text-center">
+              <h2 class="card-title">Payments are sent automatically</h2>
+              <p>Payment is divided equally between all the payees and transfered to them</p>
+            </div>
+          </div>
+
+
+          <... -->
 </body>
 
 </html>
