@@ -35,3 +35,7 @@ html {
 .chain-container {
   width: 70%;
 }
+
+.w-90vw {
+  max-width: 90vw;
+}

@@ -22,19 +22,34 @@
 </head>
 
 <body class="min-w-[320px] font-inter text-[#213547] text-base font-normal">
+
   <div class="navbar bg-base-100">
-    <div class="flex-1">
+    <div class="navbar-start">
+      <div class="dropdown">
+        <label tabindex="0" class="btn btn-ghost lg:hidden">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
+        </label>
+        <ul tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
+          <li><a href="#works">How it works</a></li>
+          <li><a href="#chains">Supported chains</a></li>
+          <li><a href="https://github.com/Bullrich/1transfer" target="_blank">GitHub</a></li>
+        </ul>
+      </div>
       <a class="btn btn-ghost normal-case text-xl"><img class="logo" src="/logo.svg" alt="logo" />1 TRANSFER</a>
     </div>
-    <div class="flex-none">
+
+    <div class="navbar-center hidden lg:flex">
       <ul class="menu menu-horizontal p-0">
         <li><a href="#works">How it works</a></li>
         <li><a href="#chains">Supported chains</a></li>
         <li><a href="https://github.com/Bullrich/1transfer" target="_blank">GitHub</a></li>
-        <li><a class="btn btn-primary text-p text-primary-content" href="./app" target="_blank">Launch app</a></li>
       </ul>
     </div>
-  </div>
+    <div class="navbar-end">
+      <a class="btn btn-primary text-p text-primary-content" href="./app" target="_blank">Launch app</a>
+    </div>
+</div>
+
   <div class="hero min-h-screen bg-base-200">
     <div class="hero-content flex-col lg:flex-row">
 
@@ -97,7 +112,7 @@
     <div class="hero-content text-center">
       <div>
         <h2 class="text-5xl font-bold">Supported chains</h2>
-        <div class="grid grid-cols-3 gap-32 mt-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-32 mt-8">
           <div>
             <div class="chain-card bg-base-300 hover:bg-base-200">
               <div class="chain-container p-4 m-auto">
@@ -128,9 +143,9 @@
 
 
   <!-- Integrate section -->
-  <div class="hero min-h-screen bg-base-200" id="chains">
+  <div class="hero min-h-screen bg-base-200" id="integrate">
     <div class="hero-content flex-col lg:flex-row">
-      <div>
+      <div class="w-90vw">
 
         <div class="text-base-content">
           <h1 class="text-5xl font-bold">Integrate it into your own contract</h1>
@@ -141,7 +156,7 @@
             Find more about it in the <a class="link link-primary" href="#">documentation</a>.
           </p>
         </div>
-        <div class="mockup-code text-left max-w-full">
+        <div class="mockup-code text-left">
           <pre class="mx-8">
             <code>
 interface I1Transfer {
@@ -158,7 +173,7 @@ interface I1Transfer {
           </pre>
         </div>
       </div>
-      <img src="/works/ether.svg" alt="logo" class="max-w-sm rounded-lg" />
+      <img src="/works/ether.svg" alt="logo" class="max-w-full rounded-lg" />
     </div>
   </div>
 
