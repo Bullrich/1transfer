@@ -16,7 +16,7 @@ export class PaymentCalculator {
         if (currency.decimals <= 4) {
             this.decimalsToSplit = currency.decimals;
         } else {
-            this.decimalsToSplit = currency.isToken ? currency.decimals - 3 : currency.decimals - 4;
+            this.decimalsToSplit = currency.isToken ? currency.decimals - 2 : currency.decimals - 4;
         }
     }
 
