@@ -73,6 +73,12 @@ jobs:
         with:
           name: app
           path: ./dist/app
+      - name: Install node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - name: Remove slashes
+        run: node scripts/removeSlash.js
       - name: Setup Pages
         uses: actions/configure-pages@v2
       - name: Upload artifact
