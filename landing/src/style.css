@@ -5,6 +5,10 @@
   @apply w-52 h-52 shadow-md rounded-md mx-auto flex transition ease-in-out delay-150 hover:scale-110 duration-300;
 }
 
+.center-text {
+  @apply flex items-center justify-center
+}
+
 @tailwind utilities;
 
 :root {

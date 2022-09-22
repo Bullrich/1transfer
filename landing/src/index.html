@@ -34,6 +34,7 @@
         <ul tabindex="0" class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
           <li><a href="#works">How it works</a></li>
           <li><a href="#chains">Supported chains</a></li>
+          <li><a href="#pricing">Pricing</a></li>
           <li><a href="https://github.com/Bullrich/1transfer" target="_blank">GitHub</a></li>
         </ul>
       </div>
@@ -44,6 +45,7 @@
       <ul class="menu menu-horizontal p-0">
         <li><a href="#works">How it works</a></li>
         <li><a href="#chains">Supported chains</a></li>
+        <li><a href="#pricing">Pricing</a></li>
         <li><a href="https://github.com/Bullrich/1transfer" target="_blank">GitHub</a></li>
       </ul>
     </div>
@@ -71,6 +73,8 @@
   <div class="hero min-h-screen bg-base-400" id="works">
     <div class="hero-content text-center">
       <div>
+
+        <h1 class="text-5xl font-bold pb-12">1Transfer is easy to use and straight forward</h1>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-32">
 
 
@@ -165,6 +169,106 @@
             <div class="chain-card bg-base-300 hover:bg-base-200">
               <div class="chain-container p-4 m-auto">
                 <img src="/chains/polygon.svg" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Price section -->
+  <div class="hero min-h-screen bg-base-100" id="pricing">
+    <div class="hero-content text-center">
+      <div>
+        <h1 class="text-5xl font-bold mb-4">Pricing</h1>
+        <p class="pt-6">
+          Fees are straight forward and visible up front before starting the transaction. There are no extra hidden
+          costs.
+        </p>
+        <p>
+          They are also situational, fees are only taken when the operation is mathematically incogruent and would have
+          a remaining, so
+          for most of the scenarios, no fees will be taken.
+        </p>
+
+        <p class="pb-6">
+          Here you can find how the fee system works.
+        </p>
+
+
+        <div class="grid grid-rows-5 grid-flow-col gap-6 font-bold">
+
+
+          <div class="grid md:grid-cols-4 gap-4">
+            <div class="bg-slate-200 rounded shadow p-4 center-text">
+              <div class="text-2xl">
+                No fees
+              </div>
+            </div>
+            <div class="grid col-span-3 gap-2 md:grid-cols-3">
+              <div class=" bg-slate-300 rounded shadow p-4 px-8 col-span-3 center-text">
+                Transactions that can easily be split between users and don't have a remainder are free.
+              </div>
+              <div class=" bg-slate-200 rounded shadow p-4 center-text">
+                10 / 4 = 2.5
+              </div>
+              <div class=" bg-slate-200 rounded shadow p-4 center-text">
+                15 / 3 = 5
+              </div>
+              <div class=" bg-slate-200 rounded shadow p-4 center-text">
+                500 / 4 = 125
+              </div>
+            </div>
+          </div>
+          <!-- ... -->
+          <div class="grid sm:grid-cols-4 gap-4 row-span-3">
+            <div class="bg-slate-200 rounded shadow p-4 center-text">
+              <div class="text-2xl">
+                Fees
+              </div>
+            </div>
+            <div class="grid col-span-3 gap-2 md:grid-cols-3">
+              <div class=" bg-slate-300 rounded shadow p-4 px-8 col-span-3 center-text">
+                Transactions that can not be divided will have the remaining in the cents point taken as fee
+              </div>
+              <div class=" bg-slate-200 rounded shadow p-4 center-text">
+                10 / 3 = 3.33333...
+              </div>
+              <div class=" bg-slate-200 rounded shadow p-4 center-text">
+                100 / 7 = 14.285714...
+              </div>
+              <div class=" bg-slate-200 rounded shadow p-4 center-text">
+                500 / 9 = 55.55555...
+              </div>
+
+              <div class=" bg-slate-300 rounded shadow p-4 px-8 col-span-3 center-text">
+                This numbers can not be divided so, to simplify the operation, the following amount will be extracted
+                from the transaction
+              </div>
+
+              <div class=" bg-slate-200 rounded shadow p-4 center-text">
+                0.0001 will be taken as fee
+              </div>
+              <div class=" bg-slate-200 rounded shadow p-4 center-text">
+                0.0005 will be taken as fee
+              </div>
+              <div class=" bg-slate-200 rounded shadow p-4 center-text">
+                0.0005 will be taken as fee
+              </div>
+
+              <div class=" bg-slate-300 rounded shadow p-4 px-8 col-span-3 center-text">
+                And each user will receive
+              </div>
+
+              <div class=" bg-slate-200 rounded shadow p-4 center-text">
+                3.3333
+              </div>
+              <div class=" bg-slate-200 rounded shadow p-4 center-text">
+                14.2857
+              </div>
+              <div class=" bg-slate-200 rounded shadow p-4 center-text">
+                55.5555
               </div>
             </div>
           </div>
