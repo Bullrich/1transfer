@@ -99,6 +99,32 @@ The process is very similar to the previous one, but there are two differences:
     }
 ```
 
+## Fee
+
+The system only takes fees when the number (dividend) can not be perfectly divided by the number of people who will receive the payment (divisor). **For most cases, there will be no fees.**
+
+If there is a fee this is **always** clearly shown to the user before he approves the operation. Gas costs are **not** counted as fees.
+
+For example: 
+
+- `8` is perfectly divisible by `2`: `8 / 2 = 4`. **No fee is taken here**.
+- `10` is **not** perfectly divisible by `3`: `10 / 3 = 3.33333...`
+    - In this case, there is a remaining `3`.
+    - A **fee is taken** on the 4th decimal point: `0.0001`
+    - This is subtracted from the dividend. This makes it perfectly divisible by the divisor.
+    - `(10 - 0.0001) / 3 = 3.3333`
+    - Each user will receive `3.3333`
+
+### Formula
+
+The exact formula for this process is the following:
+
+`amount - ((amount % divisor) * (10 ** (decimals - 4)) / divisor`
+
+In the case that the currency is a token, the decimal subtraction is 2 instead of 4:
+
+`amount - ((amount % divisor) * (10 ** (decimals - 2)) / divisor`
+
 ## Edge cases to consider
 
 ### Minimum values to consider
