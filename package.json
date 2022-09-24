@@ -14,7 +14,8 @@
     "downloadPrices": "node scripts/downloadPrices.js"
   },
   "dependencies": {
-    "ethers": "^5.7.1"
+    "ethers": "^5.7.1",
+    "truncate-eth-address": "^1.0.2"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^1.0.7",

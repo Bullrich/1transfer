@@ -1,9 +1,12 @@
 <script lang="ts">
-    import { APP_NAME } from "../stores";
-    import ChainSelect from "./ChainSelect.svelte";
-    import { signer } from "../stores/crypto";
-    import LogInButton from "./LogInButton.svelte";
+    import truncateEthAddress from "truncate-eth-address";
     import Logo from "../../assets/logo.svg";
+    import { APP_NAME } from "../stores";
+    import { address, ensName, signer } from "../stores/crypto";
+    import ChainSelect from "./ChainSelect.svelte";
+    import LogInButton from "./LogInButton.svelte";
+
+    $: shortAddress = $address ? truncateEthAddress($address) : "";
 </script>
 
 <div class="navbar bg-base-100">
@@ -14,7 +17,17 @@
     </div>
     <div class="flex-none gap-2">
         {#if $signer}
-            <ChainSelect />
+            <ul class="menu menu-horizontal p-0">
+                <li>
+                    <ChainSelect />
+                </li>
+                <li>
+                    <!-- svelte-ignore a11y-missing-attribute -->
+                    <a>
+                        {$ensName ? $ensName : shortAddress}
+                    </a>
+                </li>
+            </ul>
         {:else}
             <LogInButton />
         {/if}

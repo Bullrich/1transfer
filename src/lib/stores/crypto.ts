@@ -28,3 +28,9 @@ export const address: Readable<string> = derived(signer, (signer, set) => {
         signer.getAddress().then(address => set(address));
     }
 });
+
+export const ensName: Readable<string> = derived([signer, address], ([signer, address], set) => {
+    if (signer && address) {
+        signer.provider.lookupAddress(address).then(set).catch(console.warn);
+    }
+});
