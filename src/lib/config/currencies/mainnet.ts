@@ -1,9 +1,12 @@
-import type { CurrencyMetadata } from "./types"
-import logo from "../../../assets/tokens/tether.webp";
-import busd from "../../../assets/tokens/busd.webp";
-import usdc from "../../../assets/tokens/usdc.webp";
-import dai from "../../../assets/tokens/dai.webp";
 import aave from "../../../assets/tokens/aave.webp";
+import bnb from "../../../assets/tokens/bnb.webp";
+import busd from "../../../assets/tokens/busd.webp";
+import link from "../../../assets/tokens/chainlink.webp";
+import cronos from "../../../assets/tokens/cronos.webp";
+import dai from "../../../assets/tokens/dai.webp";
+import logo from "../../../assets/tokens/tether.webp";
+import usdc from "../../../assets/tokens/usdc.webp";
+import type { CurrencyMetadata } from "./types";
 
 export const mainnetCurrencies: CurrencyMetadata[] = [
     {
@@ -43,6 +46,30 @@ export const mainnetCurrencies: CurrencyMetadata[] = [
         address: "0x6b175474e89094c44da98b954eedeac495271d0f",
         image: dai,
         name: "Dai Stablecoin",
+        decimals: 18,
+        isToken: true,
+    },
+    {
+        symbol: "link",
+        address: "0x514910771AF9Ca656af840dff83E8264EcF986CA",
+        image: link,
+        name: "Chainlink",
+        decimals: 18,
+        isToken: true,
+    },
+    {
+        symbol: "cro",
+        address: "0xA0b73E1Ff0B80914AB6fe0444E65848C4C34450b",
+        image: cronos,
+        name: "Cronos",
+        decimals: 8,
+        isToken: true,
+    },
+    {
+        symbol: "bnb",
+        address: "0xB8c77482e45F1F44dE1745F52C74426C631bDD52",
+        image: bnb,
+        name: "BNB",
         decimals: 18,
         isToken: true,
     }
