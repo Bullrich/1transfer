@@ -3,6 +3,7 @@ import logo from "../../../assets/tokens/tether.webp";
 import busd from "../../../assets/tokens/busd.webp";
 import usdc from "../../../assets/tokens/usdc.webp";
 import dai from "../../../assets/tokens/dai.webp";
+import aave from "../../../assets/tokens/aave.webp";
 
 export const mainnetCurrencies: CurrencyMetadata[] = [
     {
@@ -22,6 +23,14 @@ export const mainnetCurrencies: CurrencyMetadata[] = [
         isToken: true,
     },
     {
+        symbol: "aave",
+        address: "0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9",
+        image: aave,
+        name: "Aave",
+        decimals: 18,
+        isToken: true,
+    },
+    {
         symbol: "busd",
         address: "0x4Fabb145d64652a948d72533023f6E7A623C7C53",
         image: busd,
@@ -36,5 +45,5 @@ export const mainnetCurrencies: CurrencyMetadata[] = [
         name: "Dai Stablecoin",
         decimals: 18,
         isToken: true,
-    },
+    }
 ]
