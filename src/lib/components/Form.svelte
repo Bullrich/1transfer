@@ -1,17 +1,18 @@
 <script lang="ts">
     import { fly } from "svelte/transition";
+    import {
+        addresses,
+        amount,
+        contract,
+        currency,
+        ethBalance,
+        signer,
+        tokens,
+    } from "../stores";
     import { insertInArray } from "../utils/arrayHelper";
     import ConfirmationModal from "./ConfirmationModal.svelte";
     import Cross from "./icons/Cross.svelte";
     import PriceStat from "./PriceStat.svelte";
-    import {
-        contract,
-        ethBalance,
-        addresses,
-        amount,
-        tokens,
-        currency,
-    } from "../stores";
 
     $: disabled =
         !$contract ||
@@ -23,7 +24,9 @@
 
     $: selectedToken = defaultToken;
 
-    $: btnMessage = !$contract
+    $: btnMessage = !$signer
+        ? "Please sign in"
+        : !$contract
         ? "Network not supported"
         : !$amount
         ? "Enter an amount"
