@@ -44,11 +44,6 @@ contract PaymentSplitter {
         return a % b;
     }
 
-    function getUserTokenBalance(IERC20 token) public view returns (uint) {
-        uint tokenBalance = token.balanceOf(msg.sender);
-        return tokenBalance;
-    }
-
     // Calculate the modular value into the 0.01 field of 1 eth.
     function calculateRemaining(uint amount, uint recipients, uint decimals) public pure returns (uint) {
         return modulo(amount, recipients * (10 **  decimals));
