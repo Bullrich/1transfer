@@ -1,12 +1,12 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 
 contract PaymentSplitter {
     address private owner;
     uint256 private surplus;
-    mapping (ERC20 => uint256) private tokenSurplus;
+    mapping (IERC20 => uint256) private tokenSurplus;
     uint256 private constant ethDecimals = 18;
 
     constructor() {
@@ -18,7 +18,7 @@ contract PaymentSplitter {
         return surplus;
     }
 
-    function getTokenSurplus(ERC20 token) public view returns (uint256) {
+    function getTokenSurplus(IERC20 token) public view returns (uint256) {
         require(msg.sender == owner, "Call is not the owner");
         return tokenSurplus[token];
     }
@@ -31,7 +31,7 @@ contract PaymentSplitter {
         surplus = 0;
     }
 
-    function withdrawTokenSurplus(ERC20 token) external {
+    function withdrawTokenSurplus(IERC20 token) external {
         require(msg.sender == owner, "Call is not the owner");
         require(tokenSurplus[token] > 0, "No surplus available for the given token");
         token.transfer(owner, tokenSurplus[token]);
@@ -64,6 +64,11 @@ contract PaymentSplitter {
         return divisibleValue / recipients;
     }
 
+    /**
+     * @dev Splits value between several users
+     * Expects to recive a value bigger than the amount of recipients
+     * Each recipient needs to be an address
+     */
     function splitPayment(address[] memory recipients) public payable {
         // get the amount of recipients
         uint nrOfrecipients = recipients.length;
@@ -79,7 +84,15 @@ contract PaymentSplitter {
         uint256 remaining = calculateRemaining(msg.value, nrOfrecipients, ethDecimals - 4);
         surplus += remaining;
     }
-    function splitTokenPayment(address[] memory recipients, uint256 amount, ERC20 token) public {
+
+    /**
+     * @dev Splits an amount of tokens between several users
+     * Expects to receive an amount bigger than the amount of recipients
+     * Each recipient needs to be an address
+     * The token needs to be an ERC20 token that implements the transfer, decimals and allowance methods
+     * Token needs to have been approved to be used by this contract address
+     */
+    function splitTokenPayment(address[] memory recipients, uint256 amount, IERC20Metadata token) public {
         require(token.allowance(msg.sender, address(this)) >= amount, "Insuficient Allowance");
         require(token.transferFrom(msg.sender, address(this),amount), "Transfer Failed");
 
