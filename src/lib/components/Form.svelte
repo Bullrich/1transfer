@@ -25,7 +25,7 @@
     $: selectedToken = defaultToken;
 
     $: btnMessage = !$signer
-        ? "Please sign in"
+        ? "Connect wallet"
         : !$contract
         ? "Network not supported"
         : !$amount
