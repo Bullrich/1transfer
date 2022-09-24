@@ -13,7 +13,10 @@
     {:else}
         <h1 class="text-5xl font-bold">1 Transfer</h1>
         <p class="py-6">
-            Send crypto to many addresses in 1 transfer.
+            Transfer native and ERC20 coins to multiple accounts in a single
+            transfer.<br />
+            Supports multiple chains and tokens, transfer to many using the
+            <b>zero hassle single push</b> system.
         </p>
     {/if}
 </div>
