@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { remaining, splitPayment } from "../stores/contract";
+    import { splitPayment } from "../stores/contract";
     import { addressesLength as aLength, amount } from "../stores/form";
 </script>
 
@@ -8,7 +8,7 @@
         <h1 class="text-5xl font-bold">Payment details</h1>
         <p class="py-6">
             Payment will be split between {$aLength} accounts. Each account will
-            receive {$splitPayment} and the difference is {$remaining}
+            receive {$splitPayment}
         </p>
     {:else}
         <h1 class="text-5xl font-bold">1 Transfer</h1>

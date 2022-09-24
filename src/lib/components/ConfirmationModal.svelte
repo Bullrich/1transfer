@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { remaining, splitPayment, addresses, amount, price, currency as currencyStore } from "../stores";
+    import { addresses, amount, currency as currencyStore, price, remaining, splitPayment } from "../stores";
     import ContractButton from "./ContractButton.svelte";
     import Price from "./Price.svelte";
 
@@ -28,9 +28,8 @@
         <p class="py-4">Each account will receive {$splitPayment} {currencySymbol}</p>
         {#if fee}
             <p class="py-4">
-                A remaining fee of
-                <Price amount={$remaining} {currency} />
-                will be taken
+                The operation is not perfectly divided by the amount of payees. A fee of {$remaining} (<Price amount={$remaining} {currency} />) will be substracted to balance the operation.
+                Find out how the fee system works <a class="link" href="https://github.com/Bullrich/1transfer/tree/main/contracts#fee" target="_blank">here</a>.
             </p>
         {/if}
         <div class="overflow-x-auto mt-6">
