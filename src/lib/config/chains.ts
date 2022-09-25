@@ -49,3 +49,6 @@ export const chainData: Map<Chains, ChainData> = new Map<Chains, ChainData>([
     [Chains.OPTIMISM_GOERLI, optimismGoerli]
 ]
 );
+
+/** List of chains that are supported by the production app */
+export const supportedChains:Chains[] = [Chains.MAINNET, Chains.POLYGON, Chains.OPTIMISM];

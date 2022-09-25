@@ -1,9 +1,10 @@
 import { utils } from "ethers";
+import { supportedChains } from "../config/chains";
 import { Chains, getChain } from "./chains";
 
 export const getChainCollection = (): { name: string; id: Chains }[] => {
     const collection: { name: string; id: Chains }[] = [];
-    for (const chain in Chains) {
+    for (const chain of supportedChains) {
         const isValueProperty = Number(chain) >= 0
         if (isValueProperty) {
             const name: string = Chains[chain];
