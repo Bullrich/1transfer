@@ -79,7 +79,7 @@
     }
 
     function changeCurrency() {
-        $currency = $tokens.find((t) => t.symbol === selectedToken);
+        $currency = $tokens.find((t) => t.symbol === selectedToken.toLocaleLowerCase());
     }
 </script>
 
