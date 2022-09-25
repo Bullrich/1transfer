@@ -13,6 +13,7 @@ You can also test (`npm run test`) and build (`npm run build`) the smart contrac
 - Mainnet: [0x0ec74463be41b6145980bb3fd3e54ec983738e9a](https://etherscan.io/address/0x0ec74463be41b6145980bb3fd3e54ec983738e9a)
 - Goerli: [0xdefacadafc5907c8c6c2babdf9acf964ceb6f972](https://goerli.etherscan.io/address/0xdefacadafc5907c8c6c2babdf9acf964ceb6f972)
 - Optimism: [0xb2ace012e6787e63e97e20dcf6338d2b4a1f41c6](https://optimistic.etherscan.io/address/0xb2ace012e6787e63e97e20dcf6338d2b4a1f41c6)
+- Polygon: [0x81025813e9fc8590a4b4767a75ff9d9fe185b868](https://polygonscan.com/address/0x81025813e9fc8590a4b4767a75ff9d9fe185b868)
 
 ## Building on top of the contract
 

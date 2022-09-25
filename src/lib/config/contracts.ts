@@ -6,6 +6,7 @@ const RINKEBY = "0x0DcC81857eabbeB9d9e6769b36eA9e7Cb5704487";
 const GOERLI = "0xdefacadafc5907c8c6c2babdf9acf964ceb6f972";
 const MAINNET = "0x0eC74463be41B6145980bB3fd3e54eC983738E9a";
 const OPTIMISM = "0xb2ace012e6787e63e97e20dcf6338d2b4a1f41c6";
+const POLYGON = "0x81025813e9fc8590a4b4767a75ff9d9fe185b868";
 
 export function getContractAddress(chain: Chains): string {
     switch (chain) {
@@ -21,6 +22,8 @@ export function getContractAddress(chain: Chains): string {
             return MAINNET;
         case Chains.OPTIMISM:
             return OPTIMISM;
+        case Chains.POLYGON:
+            return POLYGON;
         default:
             return null;
     }
