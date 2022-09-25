@@ -61,7 +61,7 @@ import "./ITransfer.sol";
 
 contract PaymentSystem {
     ITransfer transfer = ITransfer(0xdefacadafc5907c8c6c2babdf9acf964ceb6f972);
-		address[] partners = [0x0001, 0x0002, 0x0003];
+    address[] partners = [0x0001, 0x0002, 0x0003];
 }
 ```
 
@@ -71,9 +71,9 @@ For the payment system, we can have a function that will work in the following w
 
 ```solidity
 function payForService() external payable {
-        // enable the service that the user paid for here
-        transfer.splitPayment{value: msg.value}(partners);
-    }
+    // enable the service that the user paid for here
+    transfer.splitPayment{value: msg.value}(partners);
+}
 ```
 
 In the function, we will make our assertions, enable the system to work, and afterward, invoke the method `splitPayment` from the `ITransfer` interface. This function will evenly split the payment between all the people in the `partners` address array.
@@ -90,15 +90,15 @@ The process is very similar to the previous one, but there are two differences:
 - You will have to call the method `splitTokenPayment` with the accounts that will receive a payment, the number of tokens you wish to split, and the address where the smart contract of the token is available.
 
 ```solidity
-		IERC20 constant token = IERC20(0x123456);
-    function payForServiceWithERC20(uint amount) external payable {
-        // enable the service that the user paid for 
-				// ...
-        // approve the token to be used by the 1Transfer contract
-        token.approve(address(transfer), amount);
-        // invoke the method with the amount of tokens and the address of the token smart contract
-        transfer.splitTokenPayment(partners, amount, address(token));
-    }
+IERC20 constant token = IERC20(0x123456);
+function payForServiceWithERC20(uint amount) external payable {
+    // enable the service that the user paid for 
+    // ...
+    // approve the token to be used by the 1Transfer contract
+    token.approve(address(transfer), amount);
+    // invoke the method with the amount of tokens and the address of the token smart contract
+    transfer.splitTokenPayment(partners, amount, address(token));
+}
 ```
 
 ## Fee
