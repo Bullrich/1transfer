@@ -43,3 +43,18 @@ html {
 .w-90vw {
   max-width: 90vw;
 }
+
+@keyframes wipe-enter {
+	0% {
+		transform: scale(0, .025);
+	}
+	50% {
+		transform: scale(1, .025);
+	}
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .grow-animation {
+    animation: wipe-enter 0.3s 1;
+  }
+}

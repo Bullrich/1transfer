@@ -62,7 +62,8 @@
         <h1 class="text-5xl font-bold">1 TRANSFER</h1>
         <p class="py-6">
           Transfer native and ERC20 coins to multiple accounts in a single transfer.<br />
-          Supports multiple chains and tokens, <i>transfer from 1 to many</i> using the <b>zero hassle single push</b> app or build on
+          Supports multiple chains and tokens, <i>transfer from 1 to many</i> using the <b>zero hassle single push</b>
+          app or build on
           top of the system using our deployed contracts.
         </p>
         <a class="btn btn-primary text-primary-content" href="./app" target="_blank">Launch app</a>
@@ -71,44 +72,59 @@
     </div>
   </div>
   <!-- How it works section -->
-  <div class="hero min-h-screen bg-base-400" id="works">
+  <div class="hero min-h-screen bg-base-300" id="works">
     <div class="hero-content text-center">
       <div>
 
-        <h1 class="text-5xl font-bold pb-12">1Transfer is easy to use and straight forward</h1>
+        <!--div>
+          <h1 class="text-5xl font-bold pb-12">The problem</h1>
+          <div class="center-text">
+            <div class="card lg:card-side bg-base-100 shadow-xl max-w-4xl m-6">
+              <figure><img src="/works/selection.svg" alt="People connected" class="max-h-52 p-8" /></figure>
+              <div class="card-body">
+                <h2 class="card-title">Transfering to many is difficult</h2>
+                <p>When transfering to many users, one needs to divide the final values, set up the correct currency amount and handle floating point divisions when the number can not be perfectly divided.</p>
+              </div>
+            </div>
+          </div>
+        </div-->
+
+        <h1 class="text-5xl font-bold py-12">How it works</h1>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-32">
 
-
           <div class="card w-96 bg-base-100 shadow-xl max-w-full">
             <figure class="px-10 pt-10">
-              <img src="/works/crypto.svg" alt="Woman with crypto" class="rounded-xl" />
+              <img src="/works/connected.svg" alt="People connected" class="rounded-xl max-h-52" />
             </figure>
             <div class="card-body items-center text-center">
-              <h2 class="card-title">Select an amount</h2>
-              <p>Pick the amount and currency that you want to send</p>
+              <h2 class="card-title">Single push multi transfer</h2>
+              <p>The smart contract handles all the divisions and transfers, merging several individual transactions into
+                one.</p>
             </div>
           </div>
 
           <div class="card w-96 bg-base-100 shadow-xl max-w-full">
             <figure class="px-10 pt-10">
-              <img src="/works/connected.svg" alt="People connected" class="rounded-xl" />
+              <img src="/works/maths.svg" alt="Woman with crypto" class="rounded-xl max-h-52" />
             </figure>
             <div class="card-body items-center text-center">
-              <h2 class="card-title">Set all the destinataries</h2>
-              <p>Add all the addresses that you want to transfer to</p>
+              <h2 class="card-title">Handles floating point number divisions</h2>
+              <p>The system is built to smoothly handle divisions which would generate floating points</p>
             </div>
           </div>
 
           <div class="card w-96 bg-base-100 shadow-xl max-w-full">
             <figure class="px-10 pt-10">
-              <img src="/works/pig.svg" alt="Piggy bank" class="rounded-xl" />
+              <img src="/works/happy.svg" alt="Happy woman" class="rounded-xl max-h-52" />
             </figure>
             <div class="card-body items-center text-center">
-              <h2 class="card-title">Execute smart contract</h2>
-              <p>The contract will divide the payment equally and transfer to all the payees</p>
+              <h2 class="card-title">Easy to use</h2>
+              <p>The system is intuitive and hassle free. It previews on real time how the operation will be executed.</p>
             </div>
           </div>
         </div>
+
+        
       </div>
     </div>
   </div>
@@ -136,7 +152,8 @@
             </figure>
             <div class="card-body items-center text-center">
               <h2 class="card-title">Automatically split transfers</h2>
-              <p>Integrate the interface into your smart contract and automatically split payments that you receive</p>
+              <p>Build on top of the system to automatically split payments that you or your colleges receive while
+                handling floating point divisions</p>
             </div>
           </div>
         </div>
@@ -279,7 +296,7 @@
 
         <div class="text-base-content">
           <h1 class="text-5xl font-bold">Integrate it into your own contract</h1>
-          <p class="pt-4"> Easily implement it into your own smart contract to automatically distribute payments between
+          <p class="pt-4"> Connect your smart contract to automatically distribute payments between
             different acounts.
           </p>
           <p class="pb-6">
