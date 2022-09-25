@@ -22,7 +22,7 @@ const optimism: ChainData = {
     chainId: utils.hexValue(Chains.OPTIMISM),
     nativeCurrency: { name: 'ETH', decimals: 18, symbol: 'eth' },
     rpcUrls: ['https://mainnet.optimism.io'],
-    blockExplorerUrls: ['https://optimistic.etherscan.io']
+    blockExplorerUrls: ['https://optimistic.etherscan.io/']
 };
 
 const optimismKovan: ChainData = {
@@ -38,7 +38,7 @@ const optimismGoerli: ChainData = {
     chainId: utils.hexValue(Chains.OPTIMISM_GOERLI),
     nativeCurrency: { name: 'KOR', decimals: 18, symbol: 'eth' },
     rpcUrls: ['https://goerli.optimism.io'],
-    blockExplorerUrls: ['https://blockscout.com/optimism/goerli']
+    blockExplorerUrls: ['https://blockscout.com/optimism/goerli/']
 };
 
 export const chainData: Map<Chains, ChainData> = new Map<Chains, ChainData>([
