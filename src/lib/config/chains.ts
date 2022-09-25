@@ -41,14 +41,32 @@ const optimismGoerli: ChainData = {
     blockExplorerUrls: ['https://blockscout.com/optimism/goerli/']
 };
 
+const mainnet: ChainData = {
+    chainName: 'Ethereum Mainnet',
+    chainId: utils.hexValue(Chains.MAINNET),
+    nativeCurrency: { name: 'ETH', decimals: 18, symbol: 'eth' },
+    rpcUrls: ['hhttps://mainnet.infura.io/v3/'],
+    blockExplorerUrls: ['https://etherscan.io/']
+};
+
+const rinkeby: ChainData = {
+    chainName: 'Rinkeby Test Network',
+    chainId: utils.hexValue(Chains.RINKEBY),
+    nativeCurrency: { name: 'ETH', decimals: 18, symbol: 'eth' },
+    rpcUrls: ['https://rinkeby.infura.io/v3/'],
+    blockExplorerUrls: ['https://rinkeby.etherscan.io/']
+};
+
 export const chainData: Map<Chains, ChainData> = new Map<Chains, ChainData>([
     [Chains.POLYGON, polygon],
     [Chains.MUMBAI, mumbai],
     [Chains.OPTIMISM_KOVAN, optimismKovan],
     [Chains.OPTIMISM, optimism],
-    [Chains.OPTIMISM_GOERLI, optimismGoerli]
+    [Chains.OPTIMISM_GOERLI, optimismGoerli],
+    [Chains.MAINNET, mainnet],
+    [Chains.RINKEBY, rinkeby]
 ]
 );
 
 /** List of chains that are supported by the production app */
-export const supportedChains:Chains[] = [Chains.MAINNET, Chains.POLYGON, Chains.OPTIMISM];
+export const supportedChains: Chains[] = [Chains.MAINNET, Chains.POLYGON, Chains.OPTIMISM];
