@@ -6,6 +6,8 @@
 
 It supports multiple chains and every single ERC20 token running on that chain.
 
+It was built to handle [floating point number divisions](https://docs.soliditylang.org/en/develop/types.html#fixed-point-numbers) which can be challenging topic in the Solidity scenario.
+
 It was built for the [ETH Global]([https://online.ethglobal.com/](https://online.ethglobal.com/)) hackathon.
 
 ## The smart contract
